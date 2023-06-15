@@ -40,7 +40,7 @@ try:
     for i in range(2):
         #initialize the opencv video writer
         video_name = "test-videos/test-video-"+str(i)+".mp4"
-        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
+        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 60, (renderWidth, renderHeight))
 
         for j in range(240):
             # If the current eye is a compound eye, set the sample rate for it high
