@@ -1,0 +1,1 @@
+This test is a repeat of the first test but with exaggerated varying distances from each object to see if the distance is a factor in the stitching of the video. This test shows that it is not a factor the model takes into consideration.

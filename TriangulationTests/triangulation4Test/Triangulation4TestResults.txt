@@ -1,0 +1,1 @@
+This test is similar to test three, but also looks up at teh blue sky to see how the up-down directions are incorporated into the video.

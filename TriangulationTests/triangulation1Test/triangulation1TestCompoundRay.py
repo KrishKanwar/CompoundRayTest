@@ -14,8 +14,8 @@ from threading import Timer
 import eyeRendererHelperFunctions as eyeTools
 
 # Makes sure we have a "test-videos" folder
-if not os.path.exists("TriangulationTest/triangulation1Test/test-videos"):
-    os.mkdir("TriangulationTest/triangulation1Test/test-videos")
+if not os.path.exists("TriangulationTests/triangulation1Test/test-videos"):
+    os.mkdir("TriangulationTests/triangulation1Test/test-videos")
 
 try:
     #load the compound-ray library
@@ -27,7 +27,7 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     #Load the modified example scene
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/TriangulationTest/triangulation1Test/triangulation1Test.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/TriangulationTests/triangulation1Test/triangulation1-test.gltf"), 'utf-8')))
 
     #Set the frame size.
     renderWidth = 400
@@ -39,7 +39,7 @@ try:
     #Camera 0: regular-panoramic  Camera 1: lens_opticAxis_acceptance.eye
     for i in range(2):
         #initialize the opencv video writer
-        video_name = "Takashi-Test/test-videos/test-video-"+str(i)+".mp4"
+        video_name = "TriangulationTests/triangulation1Test/test-videos/test-video-"+str(i)+".mp4"
         video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
         for j in range(240):
@@ -77,10 +77,10 @@ try:
                 #write the frame to the output video
                 video.write(bgr)
             
-            if j <= 120:
-                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0) #move forward (0-120 frame)
-            else:
-                eyeRenderer.rotateCameraLocallyAround(3.0 / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
+            #if j <= 120:
+                #eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0) #move forward (0-120 frame)
+            #else:
+                #eyeRenderer.rotateCameraLocallyAround(3.0 / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
         
         video.release()
         # Change to the next Camera

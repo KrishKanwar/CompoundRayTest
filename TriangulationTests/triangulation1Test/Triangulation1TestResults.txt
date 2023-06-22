@@ -1,0 +1,2 @@
+This first test shows that the program splices the images with curves, and also that the width for the forward-looking ommatidia is less than sideways.
+The next test will look to see if distance has any affect.

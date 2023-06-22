@@ -1,0 +1,2 @@
+This The test shows that the eye is moving how we would expect, since the ratio of time looking at each color matches the length of each section of the tube.
+Further tests will look at how the different sections are spliced from different ommatidia.
