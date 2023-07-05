@@ -20,7 +20,7 @@ if not os.path.exists("Takashi-Test/test-videos"):
 try:
     #load the compound-ray library
     print("loading the compound-ray library")
-    eyeRenderer = CDLL(os.path.expanduser("~/compound-ray/build/make/lib/libEyeRenderer3.so"))
+    eyeRenderer = CDLL(os.path.expanduser("~/compound-ray2.0/build/make/lib/libEyeRenderer3.so"))
     print("Successfully loaded ", eyeRenderer)
 
     #Configure the renderer's function outputs and inputs
