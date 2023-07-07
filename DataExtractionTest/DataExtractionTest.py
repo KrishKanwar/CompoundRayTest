@@ -39,6 +39,9 @@ try:
     # restype (result type) = RGBA 24bit
     eyeRenderer.getFramePointer.restype = ndpointer(
         dtype=c_ubyte, shape=(renderHeight, renderWidth, 4))
+    
+    video_name = "DataExtractionTest/test-videos/test-video-"+str(0)+".mp4"
+    video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
     eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-fast-vector"))
 
@@ -57,6 +60,12 @@ try:
         renderTime = eyeRenderer.renderFrame()  # Render the frame
 
         eyeRenderer.displayFrame()
+
+        rgb = eyeRenderer.getFramePointer()[::,:,:3] # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
+        #convert RGB to BGR
+        bgr = rgb[:, :, ::-1]
+        #write the frame to the output video
+        video.write(bgr)
 
         # i = 0
         # rgb = eyeRenderer.getFramePointer()[:, :, :3]
