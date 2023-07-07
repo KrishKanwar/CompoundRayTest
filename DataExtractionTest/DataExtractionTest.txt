@@ -1,0 +1,1 @@
+Test to successfully use the vector-fast camera in order to extract average pixel data for each ommatidia at each frame.
