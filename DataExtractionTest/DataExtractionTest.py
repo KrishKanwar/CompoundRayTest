@@ -62,6 +62,13 @@ try:
         eyeRenderer.displayFrame()
 
         rgb = eyeRenderer.getFramePointer()[::,:,:3] # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
+        
+        ommatid_data = []
+
+        for i in range(300):
+            col = rgb[0,i] # i: an index of ommatidium
+            ommatid_data.append(col)
+
         #convert RGB to BGR
         bgr = rgb[:, :, ::-1]
         #write the frame to the output video
@@ -82,6 +89,8 @@ try:
     input("Press enter to exit...")
     # Finally, stop the eye renderer
     eyeRenderer.stop()
+
+    print(ommatid_data)
 
 except Exception as e:
     print(e)
