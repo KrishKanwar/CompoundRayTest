@@ -32,7 +32,7 @@ try:
         "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/DataExtractionTest.gltf"), 'utf-8')))
 
     # Set the frame size.
-    renderWidth = 400
+    renderWidth = 1551
     renderHeight = 400
     eyeRenderer.setRenderSize(renderWidth, renderHeight)
 
@@ -54,7 +54,7 @@ try:
     # spreadSampleCount = 1000  # How many times each frame is rendered to get a sense of the spread of results from a given ommatidium at different sampling rates
     # eyeTools.setRenderSize(eyeRenderer, vectorWidth, 1)
 
-    for j in range(240):
+    for j in range(30):
 
         eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
         renderTime = eyeRenderer.renderFrame()  # Render the frame
@@ -65,7 +65,7 @@ try:
         
         ommatid_data = []
 
-        for i in range(300):
+        for i in range(1551):
             col = rgb[0,i] # i: an index of ommatidium
             ommatid_data.append(col)
 
