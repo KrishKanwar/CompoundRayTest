@@ -92,5 +92,7 @@ try:
 
     print(ommatid_data)
 
+    np.savetxt("DataExtractionTest/ommatid_data.csv", ommatid_data, delimiter=",")
+
 except Exception as e:
     print(e)
