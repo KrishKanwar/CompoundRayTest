@@ -39,9 +39,9 @@ from geometry import cart2sph, sph2cart
 
 # read in csv data
 data = np.genfromtxt('Projection2D/data_extraction_test_data.csv', delimiter=',')
-pts = data[787:1552, 3:6]
+pts = data[700:1552, 3:6]
 ommatid_data = np.genfromtxt('Projection2D/ommatid_data.csv', delimiter=',')
-plot_colors = ommatid_data[786:1552]/255.0
+plot_colors = ommatid_data[0:1552]/255.0
 print(plot_colors)
 
 # convert to spherical coordinate in [r=1, theta, phi] in radia n
@@ -58,7 +58,7 @@ from geometry import sph2Mollweide
 
 # use rtp from earlier
 # pick a few points
-plot_pts = data[787:1552, 3:6]
+plot_pts = data[1:1552, 3:6]
 
 print(plot_pts)
 

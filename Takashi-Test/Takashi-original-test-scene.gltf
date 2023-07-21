@@ -233,7 +233,7 @@
             "extras" : {
                 "compound-eye" : "true",
                 "compound-projection" : "spherical_orientationwise",
-                "compound-structure" : "lens_opticAxis_acceptance.eye"
+                "compound-structure" : "data.eye"
             },
             "name" : "insect-eye-spherical-projector",
             "perspective" : {

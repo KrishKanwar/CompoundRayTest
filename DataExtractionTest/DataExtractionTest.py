@@ -9,6 +9,8 @@ import numpy as np
 from PIL import Image
 import cv2
 
+import pickle
+
 from threading import Timer
 
 import eyeRendererHelperFunctions as eyeTools
@@ -54,6 +56,8 @@ try:
     # spreadSampleCount = 1000  # How many times each frame is rendered to get a sense of the spread of results from a given ommatidium at different sampling rates
     # eyeTools.setRenderSize(eyeRenderer, vectorWidth, 1)
 
+    frame_ommatid_data = []
+
     for j in range(30):
 
         eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
@@ -66,13 +70,19 @@ try:
         ommatid_data = []
 
         for i in range(1551):
-            col = rgb[0,i] # i: an index of ommatidium
-            ommatid_data.append(col)
+            old_col = rgb[0,i] # i: an index of ommatidium
+            col = np.array(old_col)
+            new_col = col.astype(float)
+            grey_scale = new_col[0]*0.299 + new_col[1]*0.587 + new_col[2]*0.114
+            ommatid_data.append(grey_scale)
+            print(grey_scale)
 
         #convert RGB to BGR
         bgr = rgb[:, :, ::-1]
         #write the frame to the output video
         video.write(bgr)
+
+        frame_ommatid_data.append(ommatid_data)
 
         # i = 0
         # rgb = eyeRenderer.getFramePointer()[:, :, :3]
@@ -90,7 +100,29 @@ try:
     # Finally, stop the eye renderer
     eyeRenderer.stop()
 
+    ommatid_data = np.array(ommatid_data)
+    frame_ommatid_data = np.array(frame_ommatid_data)
+
     print(ommatid_data)
+    print(ommatid_data.shape)
+    
+    print(frame_ommatid_data)
+    print(frame_ommatid_data.shape)
+
+    # with open('DataExtractionTest/extraction_test.pkl', 'wb') as f:  # open a text file
+    #     pickle.dump(frame_ommatid_data, f) # serialize the list
+    #     f.close()
+
+    # a = {'hello': 'world'}
+
+    with open('MotionDetector/extraction_test.pkl', 'wb') as handle:
+        pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    with open('MotionDetector/extraction_test.pkl', 'rb') as handle:
+        b = pickle.load(handle)
+
+    print(frame_ommatid_data == b)
+
 
     np.savetxt("DataExtractionTest/ommatid_data.csv", ommatid_data, delimiter=",")
 
