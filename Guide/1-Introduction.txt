@@ -1,0 +1,15 @@
+CompoundRay is a open source tool that allows for ray tracing and the creation of compound vision in artifical 3D environments.
+Link: https://doi.org/10.7554/eLife.73893
+
+The 3D environments are created in the modeling software blender and exported as gltf files. I used VS code to run the python files that would import Compound Ray and use the gltf files to create the videos of the fly view throughout the environment.
+
+It works by taking in a csv data file that contains the position, view direction, and acceptance angle of every ommatidia you want to model. The specific one I used was provided to me by Arthur Zhao through imaging of a real drosophila in the lab. Then, that information is used to get a location on the image of the ommatidia (position), the direction it points to on the 3D space (viewing direction), and the sampling space (acceptance angle). After sampling the 3D environment, each ommatidia takes an average and is assigned a color. Then, every pixel in the image is wrapped to a sphere, and for every pixel, the color of the closest ommatidia becomes the color of that pixel. It then saves this as a single frame, and then moves on to the next frame. This means you can either save each frame as an image and reconstruct the video after, or just recieve the video.
+
+Reconstructing the video after is better since it is more flexible. For example, you can apply a motion detector function to the data, recieve vectors for the optic flow of the image, plot those vectors on each image, and then reconstruct the video. You can ask Michael, Arthur, or Frank for more information on this motion decoding process, since I started it but did not delve into its full capabilities in my 8 weeks here.
+
+This is a very general overview of CompoundRay and the specifics will make more sense as you continue and look more deeply into the code, as well as run your own scenes.
+
+To assist you in undesrtanding the guide, I added a folder called "guide-supplements" that has a lot of files and figures that I am about to go over.
+
+If you ever need to email me, my email is krishkanwar@gmail.com
+

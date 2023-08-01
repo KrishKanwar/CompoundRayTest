@@ -1,0 +1,107 @@
+When I interned here, I was given a machine that already had CompoundRay set up by Takashi Kawaset. He also ran a simple test to show it worked, which I placed into a folder I named "Takashi-Test." I'm writing this to acknowledge his contribution, as he also wrote instructions on how to set up CompoundRay which I am heavily relying on for this part of the instructions.
+
+Below are his instructions, which I only lightly modified for clarity and extra information:
+
+### Install Compound-Ray ###
+ubuntu-drivers devices
+sudo ubuntu-drivers autoinstall
+sudo apt-get autoremove
+sudo reboot
+
+sudo add-apt-repository universe
+sudo apt-get install freeglut3-dev
+sudo apt-get install libxrandr-dev libxinerama-dev libxcursor-dev 
+sudo apt-get install git
+sudo apt-get install gcc
+sudo apt-get install cmake
+
+sudo apt-get install zlib1g-dev
+sudo apt-get install libopenexr-dev
+sudo apt-get install openexr
+
+wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
+sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+sudo apt-get update
+sudo apt-get install vulkan-sdk
+
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+sudo dpkg -i cuda-keyring_1.0-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cuda
+echo "PATH=$PATH:/usr/local/cuda/bin" >> ~/.bashrc
+echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64" >> ~/.bashrc
+source ~/.bashrc
+sudo reboot
+
+Download OptiX SDK "7.3.0" from https://developer.nvidia.com/designworks/optix/downloads/legacy
+
+bash NVIDIA-OptiX-SDK-7.3.0-linux64-x86_64.sh
+
+cd ~/NVIDIA-OptiX-SDK-7.3.0-linux64-x86_64/SDK
+mkdir build
+cd build
+cmake ../ -DOpenEXR_ROOT=/usr/include/OpenEXR
+make -j 8
+
+cd git clone https://github.com/BrainsOnBoard/compound-ray.git
+Replace "float_as_int" in the source code (cuda/whitted.cu, guiEyeRenderer3/shaders.cu, libEyeRenderer3/shaders.cu) with "__float_as_int"
+cd compound-ray/build/make
+cmake ../../ -DOptiX_INSTALL_DIR=~/NVIDIA-OptiX-SDK-7.3.0-linux64-x86_64/ -DARCH_INT=50
+# Find the ARCH_INT of your GPU in https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+make -j 8
+
+# The cmake and make -j 8 lines above must be run each time a file is modified in the local compound-ray folder to update the actual library that is being used by the python files.
+
+
+
+### Test Compound-Ray ###
+Download Miniconda (https://docs.conda.io/en/latest/miniconda.html#linux-installers)
+bash Miniconda3-latest-Linux-x86_64.sh
+Install Visual Studio Code (https://code.visualstudio.com/)
+Run Visual Studio Code
+Install Python Extensions (https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+File > Open Folder (~/compound-ray/python-example)
+Ctrl+Shift+P > Python: Create Environment > Conda
+Terminal > New Terminal
+Run the following commands on the terminal:
+ conda install numpy
+ conda install -c conda-forge pillow
+ python3 primary-example.py
+
+
+
+### Convert an eye-model csv file to the compound-ray eye format ###
+git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
+cd CompoundRayTest
+python convertcsv.py -i path/to/input.csv -o path/to/output.eye
+
+# The lines above transform the csv file into the format that compound-ray actually uses
+
+
+
+### Modify the GLTF scene ###
+Download Blender (https://www.blender.org/download/)
+Open blender and delete objects in the default scene. (A (select all) > X (delete))
+Import the example glTF scene. (File > Import > glTF 2.0 > select "natural-standing-sky.gltf")
+Add objects to the imported scene (Add > Cylinder or something) (https://www.instructables.com/Beginners-Guide-to-Blender/)
+Add a directional light to the scene. (Add > Light > Sun)
+Set materials (https://www.youtube.com/watch?v=oFrX9OjFUko)
+Join all mesh objects (Ctrl+J) (Compound-ray did not accept multiple meshes.)
+Edit the UV map and bake colors to the texture. (https://brandonsdrawings.com/texture-baking/)
+Select "insect-eye-spherical-projector_Orientation".
+Set the path to the eye model. (Properties panel > Camera > Custom Properties > compound-structure)
+Export the modified glTF scene. (File > Export > glTF 2.0)
+
+# I provide clarification on this step later in the guide, but the glTF file should be exported in the format of glTF Embedded (the third option), and you need to include Custom Properties and Cameras for it to run properly.
+
+
+
+### Generating movies of the modified GLTF scene ###
+python3 -m pip install opencv-python
+conda install pillow
+git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
+cd CompoundRayTest
+python testCompoundRay.py (The path to the scene file is hard-coded. You may need to modify it in the source code.)
+
+Now, you have CompoundRay setup (don't worry if the last couple of steps where you run actually run testCompoundRay.py, which I renamed takashiTestCompoundRay.py, don't make sense, I will go over the code in the next txt file.)
+

@@ -1,0 +1,52 @@
+Now that you have a test running, and you understand it, you should learn how to create your own scene so that you can create any videos that you want with CompoundRay. You can manually create scenes in blender, and you can script scenes. This first portion will also go over important things like how to export the scene properly to the python file, but once you read through the entire guide, you can choose whether you prefer manual or scripting in blender for yourself.
+
+When I started creating scenes in blender, my only guide was the short part of Takashi's guide that discusses baking, and there were some parts I added, like how to export the glTF properly, that I was not even aware of. Because of this, I had to use the internet for help on a lot of blender specifics, so I can point to good resources on it.
+
+This guide will not completely go over how to create and edit objects in blender, since there are already guides on youtube on this topic. There are so many I don't think I need to link to one, just ensure that you know how to create an object, change its material, change its properties, and delete an object.
+
+List of important shortcuts:
+
+Ctrl+J: merges meshes together
+X: always to delete something
+Shift+D: duplicate a mesh
+G: move object
+R: rotate object
+
+When you are in "G mode" or "R mode," you can click x, y, or z on the keyboard to only move in a certain axis.
+
+Another important thing that is poorly explained is focus. The placement of your cursor on the screen affects the action of keys. For example, if you select two meshes, and try to merge with Ctrl+J, it will only join if your cursor is above the scene, and not if your cursor is on the scene collection or any other menu. By playing around with blender, you begin to get a feel for these small, but important distinctions.
+
+After watching some videos, you can probably create a scene in blender that has what you need, but if you just try to export it as a glTF and run the glTF with the test code, it will most likely not work. There are a few steps you need to do to ensure it will work:
+
+1. Join all physical meshes together (does not include lights or cameras). It can actually run without all meshes joined together, but requires very specific circumstances to do so regarding the material (I think you can have an extra mesh when there is no material applied to it), so it is simpler to just join them together. You don't want to join them together when first making the scene, since it is difficult to select a detailed object in edit mode once they are a single object in object mode, so you want to do it during the baking process, which will be covered by another point.
+
+2. You want to insure that you have all the cameras you will need in blender, and that the "insect-eye-spherical-projector_Or" camera has the correct .eye file under compound-structure. The conversion from the csv to eye file just changes the numbers to fit compound-rays format/units. The easiest way to do this is to always make a scene from a copy of another scene that already has the cameras and properties there, and then just change the .eye file. I've never tested making the cameras from scratch, although it would theoretically be possible and not too difficult.
+
+3. This is the worst part. You have to make sure that there is only one material for the entire scene. This is because blender's internal material system doesn't work when you export to other programs, its specific to blender only. To have one material for the entire scene, but have different colors of different objects, you have to "bake" the colors of the scene onto a color map. This is also required when exporting blender files into any other software, like using blender for a scene in a video-game engine. This means, luckily, it is a common problem people face so there are tutorials online on how to bake to a scene. Takashi provided this link to me (https://brandonsdrawings.com/texture-baking/), but I found it difficult to follow because it wasn't a video.
+
+I prefer using the videos from the youtube channel "Ryan King Art". From all of the tutorials I watched, I found his videos to be the best since he goes into a lot of detail, goes slowly, and shows every single step of the process. He has an entire playlist of baking videos here: https://www.youtube.com/playlist?list=PLsGl9GczcgBvJPh7D_ITafvmTW7ZzQTEr
+
+Important thing to note: if making a scene from scratch, you can follow his basic baking tutorials, but if you are building off of a scene I have already provided that has its own texture map, you have to bake from one uv map to another uv map, which he has a video on here: https://www.youtube.com/watch?v=1HyexrUEIv0
+
+Baking from one texture map to another is a very difficult and annoying process that took many tries to get correctly, and even now, I struggle with getting a correct texture map. If you play around with it enough, however, you will eventually get used to the process. Don't be discouraged if you end up using a few hours on this.
+
+After watching the baking tutorials, you may notice that he prefers to bake the different properties of the material seperately, so he does diffuse, then metallic, then roughness, etc. It is actually possible to do a combined bake in blender, but you must put in a light source (sun is best), and set the roughness and specular for every object to zero. Before baking them into a single map. I would try this, but if the combined bake does not work or you want either of those two properties in your scene, you will have to bake every single property that is different for different objects seperately. You don't have to bake properties that are universal. For example, if you want every object in the scene to have the same default metallic value, you don't have to bake anything.
+
+Also, it's fine to use your GPU to bake rather than CPU in the bake settings, its should generally be faster from what I can tell and it will work the same.
+
+Final note on baking: save the baked image somewhere safe before you close blender. Firstly, if you don't save the image locally, it will just disappear. Secondly, you want to be storing them well and adding them to your git if you have one. You want the image next to the blend files you provide to other people at all times, since they need to also be able to donwload the image texture locally on their computer, otherwise they will open up your blender scene on their computer and see no color.
+
+4. Hopefully you've now baked into a texture map. You should now join all the objects together if you haven't already, and then delete every material except for the one that encompasses the entire object. Sometimes after you bake a texture and you join all the meshes together, weird stuff happens to how the texture looks. I think you should actually join the meshes before baking to avoid this, but if that is wrong, there will probably be some sort of other solution to this problem.
+
+Now, you have to make sure to export the glTF to your workspace correctly, by making sure to export as an embedded glTF, and include custom properties and cameras. Without this, the camera information will be gone, and CompoundRay will have nothing to run.
+
+You can now export your glTF, change the python file to use the current glTF, and then run it. If you succeeded, it should read in some random letters that appear in the console, and then start playing the video in the display. If it has a problem, it will abort the task at the bottom.
+
+If you don't want to go into blender, and want to make a quick change to the scene so it runs differently or properly, you can actually just edit the glTF in your IDE, as long as you remember that you didn't change it in blender. When altering a glTF, only the starting information is important. Below it is a block of random letters that isn't readable, the problem should be in the readable code before. You can also use this quick edit to change the .eye function of the camera you are using, which can sometimes be useful. In addition, if a change you make to a blender file causes it to stop working in CompoundRay, you can save the glTF from before and after the change and compare them to see why it didn't work. It could be an extra material, or some camera property that was removed.
+
+Important note: there were times where I could not run any python file, the video would always abort. The solution was to just shut off my computer and turn it back on. If you don't change a file and don't change a glTF, but for some reason, it no longer runs, you should make sure to try this solution before exploring other problems.
+
+Finally, I reccomend creating a seperate folder each time you run a new blender file like I did (mostly, I got a little lazy at the end). This is because you may be using a differnet .csv/.eye file, you are using a different glTF, you might have an altered python file to change how the camera moves throughout the scene, and you might not want to override videos that have already been created. Also, keeping a bunch of glTF, csv files, and videos in one folder is cluttered and confusing.
+
+Now, you should be able to manually create any blender scene you want and traverse through it in CompoundRay.
+

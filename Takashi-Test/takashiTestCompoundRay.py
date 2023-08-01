@@ -28,7 +28,6 @@ try:
 
     #Load the modified example scene
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
-
     #Set the frame size.
     renderWidth = 400
     renderHeight = 400
@@ -42,7 +41,7 @@ try:
         video_name = "Takashi-Test/test-videos/test-video-"+str(i)+".mp4"
         video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
-        for j in range(240):
+        for j in range(300):
             # If the current eye is a compound eye, set the sample rate for it high
             if(eyeRenderer.isCompoundEyeActive()):
                 eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100);
@@ -80,7 +79,7 @@ try:
             if j <= 120:
                 eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0) #move forward (0-120 frame)
             else:
-                eyeRenderer.rotateCameraLocallyAround(3.0 / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
+                eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
         
         video.release()
         # Change to the next Camera
