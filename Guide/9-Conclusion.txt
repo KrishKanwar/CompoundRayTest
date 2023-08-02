@@ -1,0 +1,10 @@
+So, you should know everything you need to know about ComopundRay from me now.
+
+Along with the Motion Detector, which could be used to decode local motion and begin the sstart of a complete drosophila brain simulation, or analyze algorithms for biomimetic motion detection, I also did not do another task on my list, which was to create a scene using photogrammetry.
+
+I got a Insta360 One X2 camera, which is a 360 degree camera, in order to take a video of a natural scene and use the photogrammetry program Meshroom to create a blender scene from it, but I did not have the time to do this. It is an interesting concept you could explore if you wanted to.
+
+Aside from that, there is not much else to say.
+
+Thank you for reading the guide.
+
