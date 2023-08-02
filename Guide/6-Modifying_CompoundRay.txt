@@ -10,7 +10,9 @@ The code itself is simple: if the angle between the closest ommatidia to a pixel
 
 2. I also changed the projection from Mercator to Mollweide. This is shown by the square projection becoming an elliptical projection. For this, I had to use some math to change the coordinate system of the model, black out everything outside of the ellipse, and then fit all of the ommatidia within the ellipse. In addition, the wrapping around a sphere step was different, since it is now an ellipse rather than a square/rectangle. I only applied this change to the function "__raygen__compound_projection_spherical_orientationwise()", since it was the only compound eye camera I was using to generate the videos of the drosophila vision.
 
-This function is found on line 467, and you can compare it to the other functions to see the difference, and the math that I did to wrap the eellipse around the sphere.
+This function is found on line 467, and you can compare it to the other functions to see the difference, and the math that I did to wrap the ellipse around the sphere.
+
+Also, the ellipse has an aspect ratio of 2:1 (twice as long as it is tall), and also is as large as possible while fitting within the display.
 
 You can see which videos in the GitHub were made by which shader file version with the "shader_timeline.txt" file.
 

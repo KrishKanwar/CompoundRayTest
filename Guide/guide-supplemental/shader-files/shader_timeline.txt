@@ -1,0 +1,12 @@
+shaders_b.cu is the original shader file. shaders_blindSpot_b.cu is the version with the blind spot added. shaders_blindspot_mollweide.cu is the version the version with the blind spot and the Mollweide projection added. Assigning a number to them in the order they were created, you would have version 1, version 2, and version 3. Below is the CompoundRay tests in the GitHub and which shader file was used to create the videos for each:
+
+Takashi-Test: 1
+Decreasing-Validation-Test: 1
+TriangulationTests: 1
+TrickyVisionDemonstrations: 1
+SimplifiedDeomnstrations: 2
+
+DataExtraction: N/A (different camera, but I would have been on 3 by that time)
+
+All of the videos I have with the Mollweide projection (version 3) were made temporarily in Takashi-Test, and then I moved the blend file, glTF file, and the videos out from Takashi-Test and into the additional-blender-scenes folder you see under guide-supplemental. At the end, I just remade the Takashi-Test with shader version 1. I probably should have made a different folder for each of these additional-blender-scenes, but I was running out of time and needed the scenes for a presentation I gave (it's actually two days before the presentation as I'm writing this) at the end of the program.
+

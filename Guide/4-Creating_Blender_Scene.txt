@@ -48,5 +48,7 @@ Important note: there were times where I could not run any python file, the vide
 
 Finally, I reccomend creating a seperate folder each time you run a new blender file like I did (mostly, I got a little lazy at the end). This is because you may be using a differnet .csv/.eye file, you are using a different glTF, you might have an altered python file to change how the camera moves throughout the scene, and you might not want to override videos that have already been created. Also, keeping a bunch of glTF, csv files, and videos in one folder is cluttered and confusing.
 
+IMPORTANT NOTE: I'm adding this a bit after, I realized that if you just use the blender scene from the GitHub, there may be no texture and the whole thing will appear purple. To solve this, also download the baked image I have saved next to the blend file (I have one for every blend file, although some are the same), click on the main scene object, go to the shader tab, and add an imageTexture node that uses that image you copied, and connect it to the color of the material (this will make sense if you already watched a video on baking and saw how you connect the baked image to the material at the end).
+
 Now, you should be able to manually create any blender scene you want and traverse through it in CompoundRay.
 
