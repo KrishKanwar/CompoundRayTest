@@ -1,2 +1,0 @@
-I just put a version of my compound-ray in case you wanted to make sure you built yours correctly on your machine. This version is the most recent one, so it has the most updated shader file and that Mollweide shader file is updated to the libEyeRenderer3 library.
-
