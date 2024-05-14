@@ -1,4 +1,4 @@
-So, you should know everything you need to know about ComopundRay from me now.
+So, you should know everything you need to know about CompoundRay from me now.
 
 Along with the Motion Detector, which could be used to decode local motion and begin the sstart of a complete drosophila brain simulation, or analyze algorithms for biomimetic motion detection, I also did not do another task on my list, which was to create a scene using photogrammetry.
 

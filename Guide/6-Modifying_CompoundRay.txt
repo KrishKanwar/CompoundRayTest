@@ -1,6 +1,6 @@
 Next I will go over how to modify CompoundRay itself, while also explaining some of the modifications I made myself. I recieved a lot of assistance for the steps from txt files 6-8 by my internship mentor Arthur Zhao.
 
-You may notice that the videos for different tests seems a little strange. If you don't understand what I am saying, you can see the differences under the projections folder under guide-supplemental. 
+You may notice that the videos for different tests seem a little strange. If you don't understand what I am saying, you can see the differences under the projections folder under guide-supplemental. 
 
 I altered CompoundRay itself to make its projection more accurate to the vision of Drosohphila. I made two significant changes to the "shaders.cu" file under libEyeRenderer3:
 
