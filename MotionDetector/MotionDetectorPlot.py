@@ -20,9 +20,9 @@ from geometry_copy import cart2sph, sph2cart
 
 # read in csv data
 data = np.genfromtxt('Projection2D/data_extraction_test_data.csv', delimiter=',')
-pts = data[700:1552, 3:6]
+pts = data[1:787, 3:6]
 ommatid_data = np.genfromtxt('Projection2D/ommatid_data.csv', delimiter=',')
-plot_colors = ommatid_data[0:787]/255.0
+plot_colors = ommatid_data[0:786]/255.0
 print(plot_colors)
 
 # convert to spherical coordinate in [r=1, theta, phi] in radia n
@@ -39,7 +39,7 @@ from geometry_copy import sph2Mollweide
 
 # use rtp from earlier
 # pick a few points
-plot_pts = data[1:788, 3:6]
+plot_pts = data[1:787, 3:6]
 
 print(plot_pts)
 
@@ -84,22 +84,25 @@ plt.plot(s45_xy[:,0], s45_xy[:,1], '-k', linewidth=1)
     #plt.plot(xy[:,0], xy[:,1], [1, 0, 0])
     #plt.scatter(xy[:,0], xy[:,1], c = 'blue')
 
-quiver_coord_diff_x = []
-quiver_coord_diff_y = []
+quiver_coord_diff_x1 = []
+quiver_coord_diff_y1 = []
+
+quiver_coord_diff_x2 = []
+quiver_coord_diff_y2 = []
 
 adjacent_ommatid_locations = np.genfromtxt('MotionDetector/ind_nb.csv', delimiter=',')
 
-left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:788, :]
-right_adjacent_ommatid_locations = adjacent_ommatid_locations[788:1552, :]
+left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
+right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1552, :]
 
 for i in range(xy.shape[0]):
 
     current_ommatid_position = left_adjacent_ommatid_locations[i, 0] - 1
-    adjacent_ommatid_position = left_adjacent_ommatid_locations[i, 1] - 1
+    adjacent_ommatid_position = left_adjacent_ommatid_locations[i, 2] - 1
 
     if(np.isnan(current_ommatid_position) or np.isnan(adjacent_ommatid_position)):
-        quiver_coord_diff_x.append(np.nan)
-        quiver_coord_diff_y.append(np.nan)
+        quiver_coord_diff_x1.append(np.nan)
+        quiver_coord_diff_y1.append(np.nan)
     
     else:
 
@@ -111,9 +114,33 @@ for i in range(xy.shape[0]):
         vx = vx/divide_factor
         vy = vy/divide_factor
 
-        quiver_coord_diff_x.append(vx)
-        quiver_coord_diff_y.append(vy)
+        quiver_coord_diff_x1.append(vx)
+        quiver_coord_diff_y1.append(vy)
 
+for i in range(xy.shape[0]):
+
+    current_ommatid_position = left_adjacent_ommatid_locations[i, 0] - 1
+    adjacent_ommatid_position = left_adjacent_ommatid_locations[i, 5] - 1
+
+    if(np.isnan(current_ommatid_position) or np.isnan(adjacent_ommatid_position)):
+        quiver_coord_diff_x2.append(np.nan)
+        quiver_coord_diff_y2.append(np.nan)
+    
+    else:
+
+        vx = xy[int(current_ommatid_position), 0] - xy[int(adjacent_ommatid_position), 0]
+        vy = xy[int(current_ommatid_position), 1] - xy[int(adjacent_ommatid_position), 1]
+
+        divide_factor = np.sqrt(np.power(vx,2) + np.power(vy,2))
+
+        vx = vx/divide_factor
+        vy = vy/divide_factor
+
+        quiver_coord_diff_x2.append(vx)
+        quiver_coord_diff_y2.append(vy)
+
+quiver_coord_diff_x = np.add(quiver_coord_diff_x1,quiver_coord_diff_x2)
+quiver_coord_diff_y = np.add(quiver_coord_diff_y1,quiver_coord_diff_y2)
 
 print(final_result_3D.shape)
 
@@ -121,10 +148,10 @@ final_result_3D_slice = []
 final_result_3D_slice_no_nan = []
 
 for i in range(final_result_3D.shape[0]):
-    final_result_3D_slice.append(float(final_result_3D[i, 0, 24:25]))
+    final_result_3D_slice.append(float(final_result_3D[i, 0, 4:5]))
 
-    if(not np.isnan(final_result_3D[i, 0, 24:25])):
-        final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, 24:25]))
+    if(not np.isnan(final_result_3D[i, 0, 0:1])):
+        final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, 4:5]))
 
 final_result_3D_slice = np.array(final_result_3D_slice)
 final_result_3D_slice_no_nan = np.array(final_result_3D_slice_no_nan)

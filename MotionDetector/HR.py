@@ -11,21 +11,21 @@ with open('MotionDetector/extraction_test.pkl', 'rb') as handle:
 print(ommatid_data)
 print(ommatid_data.shape)
 
-left_ommatid_values = ommatid_data[:, 0:787]
-right_ommatid_values = ommatid_data[:, 787:1552]
+left_ommatid_values = ommatid_data[:, 0:786]
+right_ommatid_values = ommatid_data[:, 786:1552]
 
 total_ommatid_data = np.genfromtxt('MotionDetector/lens_opticAxis_acceptance.csv', delimiter=',')
 
-left_ommatid_data = total_ommatid_data[1:788, :]
-right_ommatid_data = total_ommatid_data[788:1553, :]
+left_ommatid_data = total_ommatid_data[1:787, :]
+right_ommatid_data = total_ommatid_data[787:1553, :]
 
 print(left_ommatid_data)
 print(right_ommatid_data)
 
 adjacent_ommatid_locations = np.genfromtxt('MotionDetector/ind_nb.csv', delimiter=',')
 
-left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:788, :]
-right_adjacent_ommatid_locations = adjacent_ommatid_locations[788:1553, :]
+left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
+right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1553, :]
 
 print(left_adjacent_ommatid_locations)
 print(right_adjacent_ommatid_locations)
@@ -35,13 +35,13 @@ right_ommatid_values_lpf = []
 
 #create copy of ommatid_values with low pass filter
 for i in range(left_ommatid_values.shape[1]):
-    t = np.linspace(0, 1.5, 30)
+    t = np.linspace(0, 1.5, 300)
     u = left_ommatid_values[:, i]
     yf = low_pass_filter(t, u)
     left_ommatid_values_lpf.append(yf)
 
 for i in range(right_ommatid_values.shape[1]):
-    t = np.linspace(0, 1.5, 30)
+    t = np.linspace(0, 1.5, 300)
     u = right_ommatid_values[:, i]
     yf = low_pass_filter(t, u)
     right_ommatid_values_lpf.append(yf)
@@ -103,7 +103,7 @@ for i in range(np.array(left_ommatid_values_lpf).shape[0]):
     single_ommatidia_30_frames_lpf = []
 
     for i in range (6):
-        t = np.linspace(0, 1.5, 30)
+        t = np.linspace(0, 1.5, 300)
         u = np.array(single_ommatidia_30_frames)[:,i]
         vertical_slice_lpf = low_pass_filter(t, u)
         single_ommatidia_30_frames_lpf.append(vertical_slice_lpf)

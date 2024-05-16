@@ -31,7 +31,7 @@ try:
 
     # Load the modified example scene
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/DataExtractionTest.gltf"), 'utf-8')))
+        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/Takashi-data-extraction.gltf"), 'utf-8')))
 
     # Set the frame size.
     renderWidth = 1551
@@ -58,7 +58,7 @@ try:
 
     frame_ommatid_data = []
 
-    for j in range(30):
+    for j in range(300):
 
         eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
         renderTime = eyeRenderer.renderFrame()  # Render the frame

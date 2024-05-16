@@ -247,7 +247,7 @@
         {
             "extras" : {
                 "compound-eye" : "true",
-                "compound-structure" : "1000-horizontallyAcute-variableDegree.eye",
+                "compound-structure" : "lens_opticAxis_acceptance.eye",
                 "compound-projection" : "spherical_orientationwise_ids"
             },
             "name" : "insect-eye-spherical-projector-ids",
@@ -263,7 +263,7 @@
             "extras" : {
                 "compound-eye" : "true",
                 "compound-projection" : "single_dimension_fast",
-                "compound-structure" : "1000-horizontallyAcute-variableDegree.eye"
+                "compound-structure" : "lens_opticAxis_acceptance.eye"
             },
             "name" : "insect-eye-fast-vector",
             "perspective" : {
