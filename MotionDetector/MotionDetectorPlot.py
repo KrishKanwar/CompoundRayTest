@@ -151,10 +151,10 @@ for g in range(301):
         final_result_3D_slice_no_nan = []
 
         for i in range(final_result_3D.shape[0]):
-            final_result_3D_slice.append(float(final_result_3D[i, 0, h:h+1]))
+            final_result_3D_slice.append(float(final_result_3D[i, 0, g:g+1]))
 
             if(not np.isnan(final_result_3D[i, 0, 0:1])):
-                final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, h:h+1]))
+                final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, g:g+1]))
 
         final_result_3D_slice = np.array(final_result_3D_slice)
         final_result_3D_slice_no_nan = np.array(final_result_3D_slice_no_nan)

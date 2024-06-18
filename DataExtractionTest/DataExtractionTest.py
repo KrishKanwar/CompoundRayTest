@@ -31,7 +31,7 @@ try:
 
     # Load the modified example scene
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/Takashi-data-extraction.gltf"), 'utf-8')))
+        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/validation-test-smaller-extraction.gltf"), 'utf-8')))
 
     # Set the frame size.
     renderWidth = 1551
@@ -45,6 +45,7 @@ try:
     video_name = "DataExtractionTest/test-videos/test-video-"+str(0)+".mp4"
     video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
+    # Switch to insect-eye-fast-vector camera (extracts data)
     eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-fast-vector"))
 
     # Commented out code that stretches out to fill the data to the entire screen
@@ -57,6 +58,7 @@ try:
     # eyeTools.setRenderSize(eyeRenderer, vectorWidth, 1)
 
     frame_ommatid_data = []
+    frame100_ommatid_data = []
 
     for j in range(300):
 
@@ -83,6 +85,9 @@ try:
         video.write(bgr)
 
         frame_ommatid_data.append(ommatid_data)
+
+        if (j == 31):
+            frame100_ommatid_data = ommatid_data
 
         # i = 0
         # rgb = eyeRenderer.getFramePointer()[:, :, :3]
@@ -123,7 +128,7 @@ try:
 
     print(frame_ommatid_data == b)
 
-
+    ommatid_data = frame100_ommatid_data
     np.savetxt("DataExtractionTest/ommatid_data.csv", ommatid_data, delimiter=",")
 
 except Exception as e:

@@ -14,7 +14,7 @@ import numpy as np
 import os
 
 # Playing video from file:
-cap = cv2.VideoCapture("Takashi-Test/test-videos/test-video-1.mp4")
+cap = cv2.VideoCapture("Decreasing-Validation-Test/test-videos/test-video-1.mp4")
 
 try:
     if not os.path.exists('video_frames'):

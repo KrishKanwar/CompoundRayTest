@@ -58,6 +58,7 @@ try:
                 bgr = rgb[:, :, ::-1]
                 #write the frame to the output video
                 video.write(bgr)
+
             else:
                 #Render the frame
                 renderTime = eyeRenderer.renderFrame()
@@ -77,9 +78,11 @@ try:
                 video.write(bgr)
             
             if j <= 120:
-                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0) #move forward (0-120 frame)
+                # move forward (0-120 frame)
+                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
             else:
-                eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
+                # rotate 360 degree along y axis (120-240 frame)
+                eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
         
         video.release()
         # Change to the next Camera
@@ -88,5 +91,6 @@ try:
     input("Press enter to exit...")
     # Finally, stop the eye renderer
     eyeRenderer.stop()
+    
 except Exception as e:
     print(e);    

@@ -11,17 +11,21 @@ with open('MotionDetector/extraction_test.pkl', 'rb') as handle:
 print(ommatid_data)
 print(ommatid_data.shape)
 
+# Data extraction data split
 left_ommatid_values = ommatid_data[:, 0:786]
 right_ommatid_values = ommatid_data[:, 786:1552]
 
+# Ommatidia strucure data
 total_ommatid_data = np.genfromtxt('MotionDetector/lens_opticAxis_acceptance.csv', delimiter=',')
 
+# Split eyes
 left_ommatid_data = total_ommatid_data[1:787, :]
 right_ommatid_data = total_ommatid_data[787:1553, :]
 
 print(left_ommatid_data)
 print(right_ommatid_data)
 
+# Indexs of neighbors
 adjacent_ommatid_locations = np.genfromtxt('MotionDetector/ind_nb.csv', delimiter=',')
 
 left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
@@ -111,7 +115,7 @@ for i in range(np.array(left_ommatid_values_lpf).shape[0]):
     final_result_3D_left.append(single_ommatidia_30_frames_lpf)
 
 print(np.array(final_result_3D_left).shape)
-print(final_result_3D_left)
+#print(final_result_3D_left)
 
 with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
     pickle.dump(final_result_3D_left, handle, protocol=pickle.HIGHEST_PROTOCOL)
