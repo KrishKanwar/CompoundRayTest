@@ -30,9 +30,12 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     # Load the modified example scene
+    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
+    #    "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/validation-test-smaller-extraction.gltf"), 'utf-8')))
+    
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/validation-test-smaller-extraction.gltf"), 'utf-8')))
-
+            "~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
+    
     # Set the frame size.
     renderWidth = 1551
     renderHeight = 400

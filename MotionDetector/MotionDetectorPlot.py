@@ -10,8 +10,8 @@ from cmath import pi
 
 import pickle
 
-# with open('MotionDetector/final_result_3D_left.pkl', 'rb') as handle:
-with open('final_result_3D_left.pkl', 'rb') as handle:
+with open('MotionDetector/final_result_3D_left.pkl', 'rb') as handle:
+#with open('final_result_3D_left.pkl', 'rb') as handle:
     final_result_3D = np.array(pickle.load(handle))
 
 
@@ -20,11 +20,11 @@ with open('final_result_3D_left.pkl', 'rb') as handle:
 from geometry_copy import cart2sph, sph2cart
 
 # read in eyemap data, column 3:6 are [vx vy vz] viewing directions
-# data = np.genfromtxt('Projection2D/data_extraction_test_data.csv', delimiter=',')
-data = np.genfromtxt('../Projection2D/data_extraction_test_data.csv', delimiter=',') 
+data = np.genfromtxt('Projection2D/data_extraction_test_data.csv', delimiter=',')
+#data = np.genfromtxt('../Projection2D/data_extraction_test_data.csv', delimiter=',') 
 pts = data[1:787, 3:6]
-# ommatid_data = np.genfromtxt('Projection2D/ommatid_data.csv', delimiter=',')
-ommatid_data = np.genfromtxt('../Projection2D/ommatid_data.csv', delimiter=',')
+ommatid_data = np.genfromtxt('Projection2D/ommatid_data.csv', delimiter=',')
+#ommatid_data = np.genfromtxt('../Projection2D/ommatid_data.csv', delimiter=',')
 plot_colors = ommatid_data[0:786]/255.0
 print(plot_colors)
 
@@ -35,14 +35,14 @@ print(plot_colors)
 # xyz = sph2cart(rtp)
 xyz = pts
 # convert to spherical
-rtp = cart2sph(xyz)
+rtp_main = cart2sph(xyz)
 
 # %%
 # Mollweide projections, from 3d to 2d
 from geometry_copy import sph2Mollweide
 
-# adjacent_ommatid_locations = np.genfromtxt('MotionDetector/ind_nb.csv', delimiter=',')
-adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
+adjacent_ommatid_locations = np.genfromtxt('MotionDetector/ind_nb.csv', delimiter=',')
+#adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
 
 # define guidelines
 ww = np.stack((np.linspace(0,180,19), np.repeat(-180,19)), axis=1)
@@ -78,13 +78,13 @@ s45_xy = sph2Mollweide(rtp[:,1:3])
 #rtp = np.insert(pts/180*pi, 0, np.repeat(1, pts.shape[0]), axis=1)
 # xy = sph2Mollweide(cart_plot_pts[:,1:3])
 
-xy = sph2Mollweide(rtp[:,1:3])
+xy = sph2Mollweide(rtp_main[:,1:3])
 
 # plot this
-plt.scatter(xy[:,0], xy[:,1], marker='o', s=10)
+#plt.scatter(xy[:,0], xy[:,1], marker='o', s=10)
 
 
-for g in range(301):
+for g in range(300):
     for h in range(3):
         # for i in range(np.array(xy).shape[0]):
         #     plt.quiver(xy[i,0], xy[i,1], 0, 1)
@@ -124,6 +124,9 @@ for g in range(301):
                 vx = vx/divide_factor
                 vy = vy/divide_factor
 
+                #vx = vx*final_result_3D[i, h, g]
+                #vy = vy*final_result_3D[i, h, g]
+
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)
 
@@ -146,6 +149,9 @@ for g in range(301):
                 vx = vx/divide_factor
                 vy = vy/divide_factor
 
+                #vx = vx*final_result_3D[i, h+3, g]
+                #vy = vy*final_result_3D[i, h+3, g]
+
                 quiver_coord_diff_x2.append(vx)
                 quiver_coord_diff_y2.append(vy)
 
@@ -158,17 +164,17 @@ for g in range(301):
 
         #print(final_result_3D.shape)
 
-        final_result_3D_slice = []
-        final_result_3D_slice_no_nan = []
+        # final_result_3D_slice = []
+        # final_result_3D_slice_no_nan = []
 
-        for i in range(final_result_3D.shape[0]):
-            final_result_3D_slice.append(float(final_result_3D[i, 0, g:g+1]))
+        # for i in range(final_result_3D.shape[0]):
+        #     final_result_3D_slice.append(float(final_result_3D[i, 0, g:g+1]))
 
-            if(not np.isnan(final_result_3D[i, 0, 0:1])):
-                final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, g:g+1]))
+        #     if(not np.isnan(final_result_3D[i, 0, 0:1])):
+        #         final_result_3D_slice_no_nan.append(float(final_result_3D[i, 0, g:g+1]))
 
-        final_result_3D_slice = np.array(final_result_3D_slice)
-        final_result_3D_slice_no_nan = np.array(final_result_3D_slice_no_nan)
+        # final_result_3D_slice = np.array(final_result_3D_slice)
+        # final_result_3D_slice_no_nan = np.array(final_result_3D_slice_no_nan)
 
         #print(final_result_3D_slice)
 
@@ -178,19 +184,8 @@ for g in range(301):
         #print(np.min(final_result_3D_slice_no_nan))
         #print(final_result_3D_slice.shape)
 
-        final_result_3D_slice = (final_result_3D_slice/20) + 28
-        final_result_3D_slice_no_nan = (final_result_3D_slice_no_nan/20) + 28
         #print(np.max(final_result_3D_slice_no_nan))
         #print(np.min(final_result_3D_slice_no_nan))
-
-        for i in range(xy.shape[0]):
-            current_mult_val = final_result_3D_slice[i]
-
-            if(not np.isnan(current_mult_val)):
-                if(current_mult_val < 0):
-                    quiver_coord_diff_x[i] = quiver_coord_diff_x[i]*-1
-                    quiver_coord_diff_y[i] = quiver_coord_diff_y[i]*-1
-
 
         # PLOT
         plt.plot(meridians_xy[:,0], meridians_xy[:,1], '-k', linewidth=1.0)
@@ -199,7 +194,7 @@ for g in range(301):
         plt.plot(s45_xy[:,0], s45_xy[:,1], '-k', linewidth=1)
 
         # change scales to 1
-        plt.quiver(xy[:,0], xy[:,1], quiver_coord_diff_x, quiver_coord_diff_y, scale = final_result_3D_slice)
+        plt.quiver(xy[:,0], xy[:,1], quiver_coord_diff_x, quiver_coord_diff_y)
 
         plt.xlabel("azimuth")
         plt.ylabel("elevation")
