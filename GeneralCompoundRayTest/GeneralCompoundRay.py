@@ -13,15 +13,14 @@ from threading import Timer
 
 import eyeRendererHelperFunctions as eyeTools
 
-videoFrames = 300
-blenderFile = "Takashi-original-test-scene.gltf"
-videoName = "GeneralCompoundRayTest"
+#videoFrames = 300
+#blenderFile = "Takashi-original-test-scene.gltf"
+#videoName = "Takashi-scene"
 
 file = open("GeneralCompoundRayTest/GeneralCompoundRay.txt", "r")
 
-videoFrames = file.readline()
+videoFrames = int(file.readline())
 blenderFile = file.readline()
-    
 videoName = file.readline()
 
 print(videoFrames)
@@ -29,8 +28,11 @@ print(blenderFile)
 print(videoName)
 
 # Makes sure we have a "test-videos" folder
-if not os.path.exists(videoName + "/test-videos"):
-    os.mkdir(videoName + "/test-videos")
+if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video-frames"):
+    os.makedirs("GeneralCompoundRayTest/" + videoName + "/video-frames")
+
+if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video"):
+    os.makedirs("GeneralCompoundRayTest/" + videoName + "/video")
 
 try:
     #load the compound-ray library
@@ -42,7 +44,7 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     #Load the modified example scene
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/" + blenderFile), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
     #Set the frame size.
     renderWidth = 400
     renderHeight = 400
@@ -52,9 +54,6 @@ try:
 
     #Camera 0: regular-panoramic  Camera 1: lens_opticAxis_acceptance.eye
     for i in range(2):
-        #initialize the opencv video writer
-        video_name = videoName + "/test-videos/test-video-"+str(i)+".mp4"
-        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
         for j in range(videoFrames):
             # If the current eye is a compound eye, set the sample rate for it high
@@ -72,7 +71,8 @@ try:
                 #convert RGB to BGR
                 bgr = rgb[:, :, ::-1]
                 #write the frame to the output video
-                video.write(bgr)
+                image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/compound-eye-frame"+str(j)+".jpg"
+                cv2.imwrite(image_name, bgr)
 
             else:
                 #Render the frame
@@ -90,7 +90,8 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                video.write(bgr)
+                image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/panoramic-eye-frame"+str(j)+".jpg"
+                cv2.imwrite(image_name, bgr)
             
             if j <= 120:
                 # move forward (0-120 frame)
@@ -99,7 +100,6 @@ try:
                 # rotate 360 degree along y axis (120-240 frame)
                 eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
         
-        video.release()
         # Change to the next Camera
         eyeRenderer.nextCamera()
     

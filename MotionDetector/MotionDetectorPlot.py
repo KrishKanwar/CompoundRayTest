@@ -51,7 +51,7 @@ print(plot_pts)
 #rtp = np.insert(pts/180*pi, 0, np.repeat(1, pts.shape[0]), axis=1)
 xy = sph2Mollweide(cart_plot_pts[:,1:3])
 
-for g in range(301):
+for g in range(302):
     for h in range(3):
         # plot
         # define guidelines
