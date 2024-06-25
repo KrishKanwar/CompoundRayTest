@@ -126,5 +126,5 @@ print(np.array(final_result_3D_left).shape)
 #print(final_result_3D_left)
 
 # with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
-with open('final_result_3D_left.pkl', 'wb') as handle:
+with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
     pickle.dump(final_result_3D_left, handle, protocol=pickle.HIGHEST_PROTOCOL)
