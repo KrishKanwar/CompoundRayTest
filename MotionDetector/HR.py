@@ -6,8 +6,8 @@ from lowpass_method import low_pass_filter
 import pickle
 
 # set working dir
-import os
-os.chdir('../')
+# import os
+# os.chdir('../')
 
 with open('MotionDetector/extraction_test.pkl', 'rb') as handle:
 #with open('extraction_test.pkl', 'rb') as handle:
@@ -89,15 +89,17 @@ final_result_3D_left = []
 # from the low-pass filter values and ommatidia neighbors,
 # compute the directional motion signal in 6 hex directions
 for i in range(np.array(left_ommatid_values_lpf).shape[1]): # iterate over all ommatidia
+    real_i = np.where(left_adjacent_ommatid_locations[:, 0] == i+1)[0].tolist()[0]
+
     single_ommatidia_all_frames = []
-    current_ommatid_position = left_adjacent_ommatid_locations[i, 0] - 1 # row numbers are 1-off from python indexing
+    current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1 # row numbers are 1-off from python indexing
 
     for j in range(np.array(left_ommatid_values_lpf).shape[0]): # iterate over all frames
         single_ommatidia_single_frame = []
 
         # iterate over all 6 neighbors
         for k in range(np.array(left_adjacent_ommatid_locations).shape[1]-1): 
-            adjacent_ommatid_position = left_adjacent_ommatid_locations[i, k+1] - 1
+            adjacent_ommatid_position = left_adjacent_ommatid_locations[real_i, k+1] - 1
 
             # make sure there is a nb
             if(np.isnan(current_ommatid_position) or np.isnan(adjacent_ommatid_position)):
@@ -116,17 +118,17 @@ for i in range(np.array(left_ommatid_values_lpf).shape[1]): # iterate over all o
         
         single_ommatidia_all_frames.append(single_ommatidia_single_frame)
 
-    # # apply low-pass filter to the directional motion
-    # single_ommatidia_all_frames_lpf = []
-    # for i in range (6):
-    #     t = np.linspace(0, 1.5, 300)
-    #     u = np.array(single_ommatidia_all_frames)[:,i]
-    #     vertical_slice_lpf = low_pass_filter(t, u)
-    #     single_ommatidia_all_frames_lpf.append(vertical_slice_lpf)
+    # apply low-pass filter to the directional motion
+    single_ommatidia_all_frames_lpf = []
+    for i in range (6):
+        t = np.linspace(0, 1.5, 300)
+        u = np.array(single_ommatidia_all_frames)[:,i]
+        vertical_slice_lpf = low_pass_filter(t, u)
+        single_ommatidia_all_frames_lpf.append(vertical_slice_lpf)
 
-    # final_result_3D_left.append(single_ommatidia_all_frames_lpf)
+    final_result_3D_left.append(single_ommatidia_all_frames_lpf)
 
-    final_result_3D_left.append(single_ommatidia_all_frames)
+    #final_result_3D_left.append(single_ommatidia_all_frames)
 
 print(np.array(final_result_3D_left).shape)
 #print(final_result_3D_left)
@@ -137,15 +139,15 @@ with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
 
 
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
-i=350
-fig, ax = plt.subplots(1, figsize=(8, 6))
-ax.plot(left_ommatid_values[:,i])
-ax.plot(left_ommatid_values_lpf[:,i])
-# ax.plot(np.array(final_result_3D_left)[i,0,:], color='red')
-# ax.plot(np.array(final_result_3D_left)[i,1,:], color='green')
-# ax.plot(np.array(final_result_3D_left)[i,2,:], color='black')
-ax.plot(np.array(final_result_3D_left)[i,:,0], color='red')
-ax.plot(np.array(final_result_3D_left)[i,:,1], color='green')
-ax.plot(np.array(final_result_3D_left)[i,:,2], color='black')
+# i=350
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+# ax.plot(left_ommatid_values[:,i])
+# ax.plot(left_ommatid_values_lpf[:,i])
+# # ax.plot(np.array(final_result_3D_left)[i,0,:], color='red')
+# # ax.plot(np.array(final_result_3D_left)[i,1,:], color='green')
+# # ax.plot(np.array(final_result_3D_left)[i,2,:], color='black')
+# ax.plot(np.array(final_result_3D_left)[i,:,0], color='red')
+# ax.plot(np.array(final_result_3D_left)[i,:,1], color='green')
+# ax.plot(np.array(final_result_3D_left)[i,:,2], color='black')
