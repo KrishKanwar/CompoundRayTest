@@ -124,8 +124,8 @@ for g in range(300):
                 vx = vx/divide_factor
                 vy = vy/divide_factor
 
-                #vx = vx*final_result_3D[i, h, g]
-                #vy = vy*final_result_3D[i, h, g]
+                vx = vx*final_result_3D[i, h, g]
+                vy = vy*final_result_3D[i, h, g]
 
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)
@@ -149,8 +149,8 @@ for g in range(300):
                 vx = vx/divide_factor
                 vy = vy/divide_factor
 
-                #vx = vx*final_result_3D[i, h+3, g]
-                #vy = vy*final_result_3D[i, h+3, g]
+                vx = vx*final_result_3D[i, h+3, g]
+                vy = vy*final_result_3D[i, h+3, g]
 
                 quiver_coord_diff_x2.append(vx)
                 quiver_coord_diff_y2.append(vy)

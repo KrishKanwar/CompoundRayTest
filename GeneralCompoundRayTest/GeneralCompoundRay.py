@@ -13,24 +13,21 @@ from threading import Timer
 
 import eyeRendererHelperFunctions as eyeTools
 
-#videoFrames = 300
-#blenderFile = "Takashi-original-test-scene.gltf"
-#videoName = "Takashi-scene"
-
+# Read in input txt file and set to variables
 file = open("GeneralCompoundRayTest/GeneralCompoundRay.txt", "r")
-
 videoFrames = int(file.readline())
-blenderFile = file.readline()
+blenderFile = str(file.readline())
+print("blenderFile: ", blenderFile)
 videoName = file.readline()
 
-print(videoFrames)
-print(blenderFile)
-print(videoName)
+gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/gltfs/", blenderFile)
 
-# Makes sure we have a "test-videos" folder
+print(type(gltfPath))
+print(gltfPath)
+
+# Create folder for video frames and video to be saved to
 if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video-frames"):
     os.makedirs("GeneralCompoundRayTest/" + videoName + "/video-frames")
-
 if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video"):
     os.makedirs("GeneralCompoundRayTest/" + videoName + "/video")
 
@@ -44,7 +41,15 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     #Load the modified example scene
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
+    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
+    # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/gltfs/" + blenderFile), 'utf-8')))
+    scene = os.path.expanduser(os.path.expanduser(gltfPath))
+    scene = bytes(scene, 'utf-8')
+    scene = c_char_p(scene)
+    eyeRenderer.loadGlTFscene(scene)
+    print("break")
+    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(gltfPath), 'utf-8')))
+
     #Set the frame size.
     renderWidth = 400
     renderHeight = 400
@@ -54,7 +59,6 @@ try:
 
     #Camera 0: regular-panoramic  Camera 1: lens_opticAxis_acceptance.eye
     for i in range(2):
-
         for j in range(videoFrames):
             # If the current eye is a compound eye, set the sample rate for it high
             if(eyeRenderer.isCompoundEyeActive()):
@@ -73,7 +77,6 @@ try:
                 #write the frame to the output video
                 image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/compound-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
-
             else:
                 #Render the frame
                 renderTime = eyeRenderer.renderFrame()
@@ -99,14 +102,11 @@ try:
             else:
                 # rotate 360 degree along y axis (120-240 frame)
                 eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
-        
         # Change to the next Camera
         eyeRenderer.nextCamera()
-    
     input("Press enter to exit...")
     # Finally, stop the eye renderer
     eyeRenderer.stop()
     
 except Exception as e:
     print(e);    
-
