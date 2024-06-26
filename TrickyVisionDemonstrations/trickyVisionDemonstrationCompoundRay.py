@@ -14,8 +14,8 @@ from threading import Timer
 import eyeRendererHelperFunctions as eyeTools
 
 # Makes sure we have a "test-videos" folder
-if not os.path.exists("TrickyVisionDemonstrations/TrickyVision1Demonstration/test-videos"):
-    os.mkdir("TrickyVisionDemonstrations/TrickyVision1Demonstration/test-videos")
+if not os.path.exists("TrickyVisionDemonstrations/test-videos"):
+    os.mkdir("TrickyVisionDemonstrations/test-videos")
 
 try:
     #load the compound-ray library
@@ -27,7 +27,7 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     #Load the modified example scene
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/TrickyVisionDemonstrations/TrickyVision1Demonstration/trickyVision1Demonstration.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/TrickyVisionDemonstrations/trickyVisionDemonstration.gltf"), 'utf-8')))
 
     #Set the frame size.
     renderWidth = 400
@@ -39,7 +39,7 @@ try:
     #Camera 0: regular-panoramic  Camera 1: lens_opticAxis_acceptance.eye
     for i in range(2):
         #initialize the opencv video writer
-        video_name = "TrickyVisionDemonstrations/TrickyVision1Demonstration/test-videos/test-video-"+str(i)+".mp4"
+        video_name = "TrickyVisionDemonstrations/test-videos/test-video-"+str(i)+".mp4"
         video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
         for j in range(160):

@@ -141,7 +141,7 @@
 			"extras":{
 				"compound-eye":"true",
 				"compound-projection":"spherical_orientationwise",
-				"compound-structure":"trickyVision1DemonstrationData.eye"
+				"compound-structure":"trickyVisionDemonstrationData.eye"
 			},
 			"name":"insect-eye-spherical-projector",
 			"perspective":{
