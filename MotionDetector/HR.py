@@ -88,6 +88,7 @@ print(right_adjacent_ommatid_locations.shape)
 
 final_result_3D_left_nolpf = []
 final_result_3D_left = []
+final_result_3D_left_4dir = []
 
 # from the low-pass filter values and ommatidia neighbors,
 # compute the directional motion signal in 6 hex directions
@@ -95,47 +96,82 @@ for i in range(np.array(left_ommatid_values_lpf).shape[1]): # iterate over all o
     real_i = np.where(left_adjacent_ommatid_locations[:, 0] == i+1)[0].tolist()[0] # Change to in order of ommatidia in csv
 
     single_ommatidia_all_frames = []
-    current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1 # row numbers are 1-off from python indexing
+    current_ommatid_positions = left_adjacent_ommatid_locations[real_i, :] - 1 # row numbers are 1-off from python indexing
 
     for j in range(np.array(left_ommatid_values_lpf).shape[0]): # iterate over all frames
         single_ommatidia_single_frame = []
 
         # iterate over all 6 neighbors
-        for k in range(np.array(left_adjacent_ommatid_locations).shape[1]-1): 
-            pp = left_adjacent_ommatid_locations[real_i, k+1] - 1 
+        for k in range(4):
+            #pp = left_adjacent_ommatid_locations[real_i, k+1] - 1 
 
             # make sure there is a nb
-            if(np.isnan(current_ommatid_position) or np.isnan(pp)):
-                comparison_value = np.nan
-            else:
+            # if(np.isnan(current_ommatid_position[]) or np.isnan(pp)):
+            #     comparison_value = np.nan
                 # compare neighbors
-                lp0 = left_ommatid_values_lpf[j, int(current_ommatid_position)]
-                n1 = left_ommatid_values[j, int(pp)]
+            nan_flag = False
+            for z in range(7):
+                co = current_ommatid_positions[z]
+                if(np.isnan(co)):
+                    nan_flag = True
+                elif(np.isnan(left_ommatid_values[j, int(co)]) or np.isnan(left_ommatid_values_lpf[j, int(co)])):
+                    nan_flag = True
 
-                lp1 = left_ommatid_values_lpf[j, int(pp)]
-                n0 = left_ommatid_values[j, int(current_ommatid_position)]
+            if(nan_flag):
+                single_ommatidia_single_frame.append(np.nan)
+            else:
+                if(k == 0):
+                    # lp0 = np.mean(left_ommatid_values_lpf[j, int(current_ommatid_positions[0])], left_ommatid_values_lpf[j, int(current_ommatid_positions[2])], left_ommatid_values_lpf[j, int(current_ommatid_positions[5])])
+                    # n1 = np.mean(left_ommatid_values[j, int(current_ommatid_positions[3])], left_ommatid_values[j, int(current_ommatid_positions[4])])
+
+                    # lp1 = np.mean(left_ommatid_values_lpf[j, int(current_ommatid_positions[3])], left_ommatid_values_lpf[j, int(current_ommatid_positions[4])])
+                    # n0 = np.mean(left_ommatid_values[j, int(current_ommatid_positions[2])], left_ommatid_values[j, int(current_ommatid_positions[0])], left_ommatid_values[j, int(current_ommatid_positions[5])])
+                    lp0 = (left_ommatid_values_lpf[j, int(current_ommatid_positions[0])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[2])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[5])])/3
+                    n1 = (left_ommatid_values[j, int(current_ommatid_positions[3])]+ left_ommatid_values[j, int(current_ommatid_positions[4])])/3
+
+                    lp1 = (left_ommatid_values_lpf[j, int(current_ommatid_positions[3])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[4])])/3
+                    n0 = (left_ommatid_values[j, int(current_ommatid_positions[2])]+ left_ommatid_values[j, int(current_ommatid_positions[0])]+ left_ommatid_values[j, int(current_ommatid_positions[5])])/3
+                elif(k == 1):
+                    lp0 = (left_ommatid_values_lpf[j, int(current_ommatid_positions[0])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[2])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[5])])/3
+                    n1 = (left_ommatid_values[j, int(current_ommatid_positions[1])]+ left_ommatid_values[j, int(current_ommatid_positions[6])])/3
+
+                    lp1 = (left_ommatid_values_lpf[j, int(current_ommatid_positions[1])]+ left_ommatid_values_lpf[j, int(current_ommatid_positions[6])])/3
+                    n0 = (left_ommatid_values[j, int(current_ommatid_positions[2])]+ left_ommatid_values[j, int(current_ommatid_positions[0])]+ left_ommatid_values[j, int(current_ommatid_positions[5])])/3
+
+                elif(k == 2):
+                    lp0 = left_ommatid_values_lpf[j, int(current_ommatid_positions[0])]
+                    n1 = left_ommatid_values[j, int(current_ommatid_positions[2])]
+
+                    lp1 = left_ommatid_values_lpf[j, int(current_ommatid_positions[2])]
+                    n0 = left_ommatid_values[j, int(current_ommatid_positions[0])]
+
+                else:
+                    lp0 = left_ommatid_values_lpf[j, int(current_ommatid_positions[0])]
+                    n1 = left_ommatid_values[j, int(current_ommatid_positions[5])]
+
+                    lp1 = left_ommatid_values_lpf[j, int(current_ommatid_positions[5])]
+                    n0 = left_ommatid_values[j, int(current_ommatid_positions[0])]
 
                 comparison_value = (lp0*n1) - (lp1*n0)
 
-            single_ommatidia_single_frame.append(comparison_value)
+                single_ommatidia_single_frame.append(comparison_value)
         
         single_ommatidia_all_frames.append(single_ommatidia_single_frame)
 
-        
     # final_result_3D_left.append(single_ommatidia_all_frames)
     # apply low-pass filter to the directional motion
-    single_ommatidia_all_frames_lpf = []
-    for m in range (6):
+    single_ommatidia_all_frames_lpf_4dir = []
+    for m in range (4):
         t = np.linspace(0, 1.5, 300)
+        #print(np.array(single_ommatidia_all_frames).shape)
         u = np.array(single_ommatidia_all_frames)[:,m]
         vertical_slice_lpf = low_pass_filter(t, u, 0.003)
-        single_ommatidia_all_frames_lpf.append(vertical_slice_lpf)
-    final_result_3D_left.append(single_ommatidia_all_frames_lpf)
-
-    final_result_3D_left_nolpf.append(single_ommatidia_all_frames)
+        single_ommatidia_all_frames_lpf_4dir.append(vertical_slice_lpf)
+    final_result_3D_left_4dir.append(single_ommatidia_all_frames_lpf_4dir)
 
 print(np.array(final_result_3D_left).shape)
 print(np.array(final_result_3D_left_nolpf).shape)
+print("final",np.array(final_result_3D_left_4dir).shape)
 
 final_result_3D_left = np.array(final_result_3D_left)
 
@@ -143,7 +179,7 @@ final_result_3D_left = np.array(final_result_3D_left)
 
 # with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
 with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
-    pickle.dump(final_result_3D_left, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 

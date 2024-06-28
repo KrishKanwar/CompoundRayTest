@@ -77,7 +77,7 @@ xy = sph2Mollweide(rtp_main[:,1:3])
 # ax.scatter(xy[352, 0], xy[352, 1], color = 'cyan')
 
 for g in range(300):
-    for h in range(3):
+    for h in range(4):
         # compute directional arrows
         quiver_coord_diff_x1 = []
         quiver_coord_diff_y1 = []
@@ -90,19 +90,47 @@ for g in range(300):
 
         for i in range(xy.shape[0]):
             real_i = np.where(left_adjacent_ommatid_locations[:, 0] == i+1)[0].tolist()[0] # Change to in order of ommatidia in csv
-
             current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1
-            adjacent_ommatid_position = left_adjacent_ommatid_locations[real_i, h+1] - 1
-            # print(current_ommatid_position)
-            # print("adjacent_one", adjacent_ommatid_position)
+            current_ommatid_positions = left_adjacent_ommatid_locations[real_i, :] - 1
 
-            if(np.isnan(adjacent_ommatid_position)):
+            nan_flag = False
+
+            for z in range(7):
+                co = current_ommatid_positions[z]
+                if(np.isnan(co)):
+                    nan_flag = True
+                elif(np.isnan(xy[int(co), 0]) or np.isnan(xy[int(co), 1])):
+                    nan_flag = True
+
+            if(nan_flag):
                 quiver_coord_diff_x1.append(np.nan)
                 quiver_coord_diff_y1.append(np.nan)
-            
             else:
-                vx = xy[int(current_ommatid_position), 0] - xy[int(adjacent_ommatid_position), 0]
-                vy = xy[int(current_ommatid_position), 1] - xy[int(adjacent_ommatid_position), 1]
+                if(h==0):
+                    vx0 = xy[int(current_ommatid_position), 0]
+                    vx1 = (xy[int(current_ommatid_positions[3]), 0] + xy[int(current_ommatid_positions[4]), 0])/2
+                    vx = vx0-vx1
+
+                    vy0 = xy[int(current_ommatid_position), 1]
+                    vy1 = (xy[int(current_ommatid_positions[3]), 1] + xy[int(current_ommatid_positions[4]), 1])/2
+                    vy = vy0-vy1
+                
+                elif(h==1):
+                    vx0 = xy[int(current_ommatid_position), 0]
+                    vx1 = (xy[int(current_ommatid_positions[1]), 0] + xy[int(current_ommatid_positions[6]), 0])/2
+                    vx = vx0-vx1
+
+                    vy0 = xy[int(current_ommatid_position), 1]
+                    vy1 = (xy[int(current_ommatid_positions[1]), 1] + xy[int(current_ommatid_positions[6]), 1])/2
+                    vy = vy0-vy1
+
+                elif(h==2):
+                    vx = xy[int(current_ommatid_position), 0] - xy[int(current_ommatid_positions[2]), 0]
+                    vy = xy[int(current_ommatid_position), 1] - xy[int(current_ommatid_positions[2]), 1]
+
+                else:
+                    vx = xy[int(current_ommatid_position), 0] - xy[int(current_ommatid_positions[5]), 0]
+                    vy = xy[int(current_ommatid_position), 1] - xy[int(current_ommatid_positions[5]), 1]
 
                 divide_factor = np.sqrt(np.power(vx,2) + np.power(vy,2))
 
@@ -118,38 +146,9 @@ for g in range(300):
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)
 
-            # now do the same for the opposite direction
-            current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1
-            adjacent_ommatid_position = left_adjacent_ommatid_locations[real_i, h+4] - 1
-
-            if(np.isnan(adjacent_ommatid_position)):
-                quiver_coord_diff_x2.append(np.nan)
-                quiver_coord_diff_y2.append(np.nan)
-            
-            else:
-                vx = xy[int(current_ommatid_position), 0] - xy[int(adjacent_ommatid_position), 0]
-                vy = xy[int(current_ommatid_position), 1] - xy[int(adjacent_ommatid_position), 1]
-
-                divide_factor = np.sqrt(np.power(vx,2) + np.power(vy,2))
-
-                vx = vx/divide_factor
-                vy = vy/divide_factor
-
-                vx = vx*final_result_3D[i, h+3, g]
-                vy = vy*final_result_3D[i, h+3, g]
-
-                vx = vx*final_result_3D[i, h, g]
-                vy = vy*final_result_3D[i, h, g]
-
-                # vx = (vx/100)+1
-                # vy = (vx/100)+1
-
-                quiver_coord_diff_x2.append(vx)
-                quiver_coord_diff_y2.append(vy)
-
         # Subtract the opposite 2D directional vectors
-        quiver_coord_diff_x = np.subtract(quiver_coord_diff_x1, quiver_coord_diff_x2)
-        quiver_coord_diff_y = np.subtract(quiver_coord_diff_y1, quiver_coord_diff_y2)
+        quiver_coord_diff_x = quiver_coord_diff_x1
+        quiver_coord_diff_y = quiver_coord_diff_y1
 
         # Plot
         plt.plot(meridians_xy[:,0], meridians_xy[:,1], '-k', linewidth=1.0)
