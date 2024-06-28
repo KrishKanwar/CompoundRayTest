@@ -40,7 +40,7 @@ from geometry import cart2sph, sph2cart
 # read in csv data
 data = np.genfromtxt('Takashi-Test/lens_opticAxis_acceptance.csv', delimiter=',')
 pts = data[700:1552, 3:6]
-ommatid_data = np.genfromtxt('DataExtractionTest/ommatid_data.csv', delimiter=',')
+ommatid_data = np.genfromtxt('DataExtraction/ommatid_data.csv', delimiter=',')
 plot_colors = ommatid_data[0:1552]/255.0
 print(plot_colors)
 

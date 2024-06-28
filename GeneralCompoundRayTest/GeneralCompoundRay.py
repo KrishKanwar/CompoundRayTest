@@ -20,10 +20,10 @@ blenderFile = str(file.readline())
 print("blenderFile: ", blenderFile)
 videoName = file.readline()
 
-gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/gltfs/", blenderFile)
+#gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/DataExtraction/validation-test-smaller-extraction.gltf")
 
-print(type(gltfPath))
-print(gltfPath)
+#print(type(gltfPath))
+#print(gltfPath)
 
 # Create folder for video frames and video to be saved to
 if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video-frames"):
@@ -41,13 +41,13 @@ try:
     eyeTools.configureFunctions(eyeRenderer)
 
     #Load the modified example scene
-    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
-    # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/gltfs/" + blenderFile), 'utf-8')))
-    scene = os.path.expanduser(os.path.expanduser(gltfPath))
-    scene = bytes(scene, 'utf-8')
-    scene = c_char_p(scene)
-    eyeRenderer.loadGlTFscene(scene)
-    print("break")
+    # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Decreasing-Validation-Test/validation-test-smaller.gltf"), 'utf-8')))
+    # scene = os.path.expanduser(os.path.expanduser(gltfPath))
+    # scene = bytes(scene, 'utf-8')
+    # scene = c_char_p(scene)
+    # eyeRenderer.loadGlTFscene(scene)
+    # print("break")
     #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(gltfPath), 'utf-8')))
 
     #Set the frame size.
@@ -96,9 +96,9 @@ try:
                 image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/panoramic-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
-            if j <= 120:
+            if j <= 300:
                 # move forward (0-120 frame)
-                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
+                eyeRenderer.translateCameraLocally(0.0, 0.0, 0.2)
             else:
                 # rotate 360 degree along y axis (120-240 frame)
                 eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)

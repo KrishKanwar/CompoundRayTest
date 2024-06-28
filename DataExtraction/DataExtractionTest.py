@@ -16,8 +16,8 @@ from threading import Timer
 import eyeRendererHelperFunctions as eyeTools
 
 # Makes sure we have a "test-videos" folder
-if not os.path.exists("DataExtractionTest/test-videos"):
-    os.mkdir("DataExtractionTest/test-videos")
+if not os.path.exists("DataExtraction/test-videos"):
+    os.mkdir("DataExtraction/test-videos")
 
 try:
     # load the compound-ray library
@@ -31,7 +31,7 @@ try:
 
     # Load the modified example scene
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtractionTest/validation-test-smaller-extraction.gltf"), 'utf-8')))
+        "~/Documents/GitHub/CompoundRayTests/DataExtraction/validation-test-smaller-extraction.gltf"), 'utf-8')))
     
     #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
     #        "~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
@@ -45,7 +45,7 @@ try:
     eyeRenderer.getFramePointer.restype = ndpointer(
         dtype=c_ubyte, shape=(renderHeight, renderWidth, 4))
     
-    video_name = "DataExtractionTest/test-videos/test-video-"+str(0)+".mp4"
+    video_name = "DataExtraction/test-videos/test-video-"+str(0)+".mp4"
     video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
     # Switch to insect-eye-fast-vector camera (extracts data)
@@ -80,7 +80,6 @@ try:
             new_col = col.astype(float)
             grey_scale = new_col[0]*0.299 + new_col[1]*0.587 + new_col[2]*0.114
             ommatid_data.append(grey_scale)
-            print(grey_scale)
 
         #convert RGB to BGR
         bgr = rgb[:, :, ::-1]
@@ -89,16 +88,16 @@ try:
 
         frame_ommatid_data.append(ommatid_data)
 
-        if (j == 31):
+        if (j == 90):
             frame100_ommatid_data = ommatid_data
 
         # i = 0
         # rgb = eyeRenderer.getFramePointer()[:, :, :3]
         # col = rgb[0, i]  # i: an index of ommatidium
 
-        if j <= 120:
+        if j <= 300:
             eyeRenderer.translateCameraLocally(
-                0.0, 0.0, 1.0)  # move forward (0-120 frame)
+                0.0, 0.0, 0.2)  # move forward (0-120 frame)
         else:
             # rotate 360 degree along y axis (120-240 frame)
             eyeRenderer.rotateCameraLocallyAround(
@@ -132,7 +131,7 @@ try:
     print(frame_ommatid_data == b)
 
     ommatid_data = frame100_ommatid_data
-    np.savetxt("DataExtractionTest/ommatid_data.csv", ommatid_data, delimiter=",")
+    np.savetxt("DataExtraction/ommatid_data.csv", ommatid_data, delimiter=",")
 
 except Exception as e:
     print(e)

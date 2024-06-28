@@ -10,10 +10,19 @@ from cmath import pi
 
 import pickle
 
+# # set working dir
+# import os
+# os.chdir('../')
+
 with open('MotionDetector/final_result_3D_left.pkl', 'rb') as handle:
 #with open('final_result_3D_left.pkl', 'rb') as handle:
     final_result_3D = np.array(pickle.load(handle))
 
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+
+# ax.plot(final_result_3D[350, 0, 100:120], color = 'b')
+# ax.plot(final_result_3D[350, 2, 100:120], color = 'y')
+# ax.plot(final_result_3D[350, 4, 100:120], color = 'g')
 
 # %%
 # transformation between Cartesian <-> spherical coordinates
@@ -61,6 +70,12 @@ s45_xy = sph2Mollweide(rtp[:,1:3])
 
 xy = sph2Mollweide(rtp_main[:,1:3])
 
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+
+# ax.scatter(xy[:, 0], xy[:,1], color = 'b')
+# ax.scatter(xy[351, 0], xy[351, 1], color = 'y')
+# ax.scatter(xy[352, 0], xy[352, 1], color = 'cyan')
+
 for g in range(300):
     for h in range(3):
         # compute directional arrows
@@ -74,11 +89,14 @@ for g in range(300):
         right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1552, :]
 
         for i in range(xy.shape[0]):
+            real_i = np.where(left_adjacent_ommatid_locations[:, 0] == i+1)[0].tolist()[0] # Change to in order of ommatidia in csv
 
-            current_ommatid_position = left_adjacent_ommatid_locations[i, 0] - 1
-            adjacent_ommatid_position = left_adjacent_ommatid_locations[i, h+1] - 1
+            current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1
+            adjacent_ommatid_position = left_adjacent_ommatid_locations[real_i, h+1] - 1
+            # print(current_ommatid_position)
+            # print("adjacent_one", adjacent_ommatid_position)
 
-            if(np.isnan(current_ommatid_position) or np.isnan(adjacent_ommatid_position)):
+            if(np.isnan(adjacent_ommatid_position)):
                 quiver_coord_diff_x1.append(np.nan)
                 quiver_coord_diff_y1.append(np.nan)
             
@@ -94,14 +112,17 @@ for g in range(300):
                 vx = vx*final_result_3D[i, h, g]
                 vy = vy*final_result_3D[i, h, g]
 
+                # vx = (vx/100)+1
+                # vy = (vx/100)+1
+
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)
 
-        # now do the same for the opposite direction
-            current_ommatid_position = left_adjacent_ommatid_locations[i, 0] - 1
-            adjacent_ommatid_position = left_adjacent_ommatid_locations[i, h+4] - 1
+            # now do the same for the opposite direction
+            current_ommatid_position = left_adjacent_ommatid_locations[real_i, 0] - 1
+            adjacent_ommatid_position = left_adjacent_ommatid_locations[real_i, h+4] - 1
 
-            if(np.isnan(current_ommatid_position) or np.isnan(adjacent_ommatid_position)):
+            if(np.isnan(adjacent_ommatid_position)):
                 quiver_coord_diff_x2.append(np.nan)
                 quiver_coord_diff_y2.append(np.nan)
             
@@ -116,6 +137,12 @@ for g in range(300):
 
                 vx = vx*final_result_3D[i, h+3, g]
                 vy = vy*final_result_3D[i, h+3, g]
+
+                vx = vx*final_result_3D[i, h, g]
+                vy = vy*final_result_3D[i, h, g]
+
+                # vx = (vx/100)+1
+                # vy = (vx/100)+1
 
                 quiver_coord_diff_x2.append(vx)
                 quiver_coord_diff_y2.append(vy)
@@ -136,6 +163,6 @@ for g in range(300):
         plt.xlabel("azimuth")
         plt.ylabel("elevation")
 
-        #plt.show()
+        # plt.show()
         plt.savefig('MotionDetector/HR_Figures/' + str(g) + '-frame,' + str(h) + '-direction.png')
         plt.clf()

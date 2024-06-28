@@ -2,7 +2,7 @@ import numpy as np
 from cmath import pi
 import matplotlib.pyplot as plt
 
-def low_pass_filter(t, u):
+def low_pass_filter(t, u, tau):
 
     # plot the time series
     plt.plot(t, u)
@@ -32,7 +32,7 @@ def low_pass_filter(t, u):
 
     # low pass filter
     T = 0.05/23 # sampling period
-    tau_HR = 0.1 # time constant of the low pass filter
+    tau_HR = tau # time constant of the low pass filter
     A = 1 - 2*tau_HR/T
     B = 1 + 2*tau_HR/T 
 
