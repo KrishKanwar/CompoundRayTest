@@ -1,1 +1,0 @@
-This test is similar to test four, but changes the acceptance angles slightly to see if ommatidia with greater acceptance angles are weighted more in the image formation. This test shows there is no difference to the image stitching when varying the acceptance angles.
