@@ -27,13 +27,6 @@ blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
 
 movement_data = config.items("movement")
-movement_data_test = config.items("movement")[0][1]
-
-def general_movement(c_frame, m_data):
-    for k in range(len(m_data)):
-        if c_frame<=int(m_data[k][0]):
-            eval(m_data[k][1])
-            break
 
 # Create folder for video frames and video to be saved to
 if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames"):
@@ -100,7 +93,11 @@ try:
                 image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/panoramic_eye_frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
-            general_movement(j, movement_data)
+            # Movement function
+            for k in range(len(movement_data)):
+                if j<=int(movement_data[k][0]):
+                    eval(movement_data[k][1])
+                    break
 
         # Change to the next Camera
         eyeRenderer.nextCamera()
