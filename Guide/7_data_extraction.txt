@@ -1,0 +1,10 @@
+The Data_Extraction folder contains my work for extracting the ommatidial data in CompoundRay for each frame, which can be used for plotting, motion decoding, or other possible applciations.
+
+Looking at my test, I used the "insect-eye-fast-vector" camera, which can be used to extract the rgb values from each ommatidia in order of the csv data, for each frame. You can see how I use it to extract the data in the DataExtractionTest python file, and I then save it as a pickle file to plot the ommatidia.
+
+What it is essentially doing is displaying a single row of pixels, which on the display shows up as the bottom row, that represents the color of each ommatidia, so in order for you to extract all the data, you need to make the frameWidth equal to the number of ommatidia in your csv data. You then save the color of each pixel from left to right, for each frame of the video.
+
+When altering the projection of the display, me and Arthur confirmed that the origin (0, 0) of the frame is in the top left, and if you have frameWidth and frameLength both of 400, the point (400, 400) will be in the bottom right. During the extraction process, we extract the top row, but the display shows it in the bottom row, meaning that the display is rotated 180 degrees and is upside down. This is how I learned that the videos I have been saving are actually upside down compared to the real scene CompoundRay is seeing. This is a bit weird to think about, but as long as you know where to save the pixels when doing the Data Extraction, I am not sure it will have any major impact.
+
+Aside from that, you can now just extract data and save it from the scene whenever you need to with the insect-eye-fast-vector" camera.
+

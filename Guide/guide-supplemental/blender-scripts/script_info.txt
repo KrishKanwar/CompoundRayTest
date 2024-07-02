@@ -1,2 +1,0 @@
-Most of the info is given already in the guide. I am not sure if the script in the blend file I provided is the same as the one that created the video in this folder, but it has the same principles since it just uses translation key frames and rotation key frames.
-

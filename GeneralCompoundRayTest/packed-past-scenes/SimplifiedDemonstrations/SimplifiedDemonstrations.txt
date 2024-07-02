@@ -1,9 +1,0 @@
-200 frames
-            if j <= 50:
-                eyeRenderer.rotateCameraLocallyAround(3.6 / 360.0 * (2.0 * math.pi), 0.0, 1.0, 0.0) # rotate 360 degree along y axis (120-240 frame)
-            elif j<=100:
-                eyeRenderer.rotateCameraLocallyAround(3.6 / 360.0 * (2.0 * math.pi), 0.0, 1.0, 0.0) # rotate 360 degree along y axis (120-240 frame)
-            elif j<= 150:
-                eyeRenderer.rotateCameraLocallyAround(3.6 / 360.0 * (2.0 * math.pi), 0.0, -1.0, 0.0) # rotate 360 degree along y axis (120-240 frame)
-            elif j<= 200:
-                eyeRenderer.rotateCameraLocallyAround(3.6 / 360.0 * (2.0 * math.pi), 0.0, -1.0, 0.0) # rotate 360 degree along y axis (120-240 frame)

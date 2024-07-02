@@ -1,2 +1,0 @@
-I decided I won't throw a bunch of useless blender scenes at you. Instead, I reecomend using one of the blender scenes that I have provided already in one of the tests, and build off of it, so that you have the cameras and also some other cool stuff like the grass terrain and the sky. I would reccomend using the blend files for the triangulation-tests for the grass and sky specifically, just remember to change the .eye in the cameras, and remember to bring a copy of the saved image from baking as well.
-

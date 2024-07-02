@@ -1,0 +1,8 @@
+Three things to point out:
+
+First, I had the blind-spot as black in version 2, and changed it grey in version 3 because I realized I need the area outside of the ellipse to be blacked out, and I wanted a distinction between the blind spot and the ellipse border.
+
+Second, I have a different scene for shader2, but I think you can understand what it would look like in the scene you scene in versions 1 and 3.
+
+Finally, the screenshot of the Mollweide projection is a little bit off because of the video player it was in, in the actual video the ellipse touches either the horizontal edges of the display, or the vertical edges of the display, so that it is as big as it can be while also have 2:1 aspect ratio.
+

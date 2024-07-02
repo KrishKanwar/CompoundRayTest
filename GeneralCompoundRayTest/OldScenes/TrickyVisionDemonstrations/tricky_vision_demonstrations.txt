@@ -1,0 +1,7 @@
+160 frames
+            if j <= 80:
+                #eyeRenderer.translateCameraLocally(0.0, 0.0, 0.5) #move forward (0-120 frame)
+                eyeRenderer.rotateCameraLocallyAround(-3 / 360.0 * (2.0 * math.pi), 0, 1.0, 0) # rotate 360 degree along y axis (120-240 frame)
+
+            else:
+                eyeRenderer.translateCameraLocally(0.0, 0.0, 0.5) #move forward (0-120 frame)
