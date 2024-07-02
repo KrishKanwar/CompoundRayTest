@@ -26,6 +26,15 @@ videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
 
+movement_data = config.items("movement")
+movement_data_test = config.items("movement")[0][1]
+
+def general_movement(c_frame, m_data):
+    for k in range(len(m_data)):
+        if c_frame<=int(m_data[k][0]):
+            eval(m_data[k][1])
+            break
+
 # Create folder for video frames and video to be saved to
 if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames"):
     os.makedirs("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames")
@@ -42,7 +51,6 @@ try:
     #Load the modified example scene
     # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/Scenes/" + videoName + "/" + blenderFile), 'utf-8')))
-
 
     #Set the frame size.
     renderWidth = 400
@@ -92,12 +100,7 @@ try:
                 image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/panoramic_eye_frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
-            if j <= 120:
-                # move forward (0-120 frame)
-                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
-            else:
-                # rotate 360 degree along y axis (120-240 frame)
-                eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
+            general_movement(j, movement_data)
 
         # Change to the next Camera
         eyeRenderer.nextCamera()

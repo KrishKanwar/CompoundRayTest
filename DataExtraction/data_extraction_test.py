@@ -94,7 +94,7 @@ try:
 
         frame_ommatid_data.append(ommatid_data)
 
-        if j <= 300:
+        if j < 300:
             eyeRenderer.translateCameraLocally(
                 0.0, 0.0, 0.2)  # move forward (0-120 frame)
         else:
