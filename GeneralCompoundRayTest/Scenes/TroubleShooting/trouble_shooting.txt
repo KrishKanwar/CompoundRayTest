@@ -1,7 +1,9 @@
-300
-trouble_shooting.gltf
-TroubleShooting
+[variables]
+videoFrames: 300
+blenderFile: trouble_shooting.gltf
+videoName: TroubleShooting
 
+[Section 2]
 Movement:
             if j <= 120:
                 # move forward (0-120 frame)

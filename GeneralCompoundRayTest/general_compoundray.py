@@ -11,23 +11,31 @@ import cv2
 
 from threading import Timer
 
-import eyeRendererHelperFunctions as eyeTools
+import eye_renderer_helper_functions as eyeTools
 
-# set working dir
-import os
-os.chdir('../')
+import configparser
+
+# # set working dir
+# import os
+# os.chdir('../')
 
 # Read in input txt file and set to variables
-file = open("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt", "r")
-videoFrames = int(file.readline())
-blenderFile = str(file.readline())
-print("blenderFile: ", blenderFile)
-videoName = str(file.readline())
-print(videoName)
+# file = open("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt", "r")
+# entire_file = file.read().splitlines()
+# videoFrames = int(entire_file[0])
+# blenderFile = str(entire_file[1])
+# videoName = str(entire_file[2])
 
-#videoName = "TroubleShooting"
-blenderFile = ""
-videoFrames = 300
+# #videoName = "TroubleShooting"
+# blenderFile = ""
+# videoFrames = 300
+
+config = configparser.ConfigParser()
+config.read("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt")
+
+videoFrames = int(config.get("variables", "videoFrames"))
+blenderFile = config.get("variables", "blenderFile")
+videoName = config.get("variables", "videoName")
 
 #gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/DataExtraction/validation-test-smaller-extraction.gltf")
 
@@ -51,7 +59,7 @@ try:
 
     #Load the modified example scene
     # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/Scenes/" + videoName + "/" + blenderFile), 'utf-8')))
     # scene = os.path.expanduser(os.path.expanduser(gltfPath))
     # scene = bytes(scene, 'utf-8')
     # scene = c_char_p(scene)
@@ -85,7 +93,7 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/compound-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/compound_eye_frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
 
             else:
@@ -104,7 +112,7 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/panoramic-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/panoramic_eye_frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
             if j <= 120:
