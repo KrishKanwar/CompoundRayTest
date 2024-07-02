@@ -13,12 +13,20 @@ from threading import Timer
 
 import eyeRendererHelperFunctions as eyeTools
 
-# Read in input txt file and set to variables
-file = open("GeneralCompoundRayTest/GeneralCompoundRay.txt", "r")
-videoFrames = int(file.readline())
-blenderFile = str(file.readline())
-print("blenderFile: ", blenderFile)
-videoName = file.readline()
+# # set working dir
+# import os
+# os.chdir('../')
+
+# # Read in input txt file and set to variables
+# file = open("GeneralCompoundRayTest/GeneralCompoundRay.txt", "r")
+# videoFrames = int(file.readline())
+# blenderFile = str(file.readline())
+# print("blenderFile: ", blenderFile)
+# videoName = file.readline()
+
+videoName = "SimplifiedDemonstrations"
+blenderFile = ""
+videoFrames = 300
 
 #gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/DataExtraction/validation-test-smaller-extraction.gltf")
 
@@ -26,10 +34,10 @@ videoName = file.readline()
 #print(gltfPath)
 
 # Create folder for video frames and video to be saved to
-if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video-frames"):
-    os.makedirs("GeneralCompoundRayTest/" + videoName + "/video-frames")
-if not os.path.exists("GeneralCompoundRayTest/" + videoName + "/video"):
-    os.makedirs("GeneralCompoundRayTest/" + videoName + "/video")
+if not os.path.exists("GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video-frames"):
+    os.makedirs("GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video-frames")
+# if not os.path.exists("GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video"):
+#     os.makedirs("GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video")
 
 try:
     #load the compound-ray library
@@ -42,7 +50,7 @@ try:
 
     #Load the modified example scene
     # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Decreasing-Validation-Test/validation-test-smaller.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/packed-past-scenes/SimplifiedDemonstrations/SimplifiedDemonstrations.gltf"), 'utf-8')))
     # scene = os.path.expanduser(os.path.expanduser(gltfPath))
     # scene = bytes(scene, 'utf-8')
     # scene = c_char_p(scene)
@@ -72,11 +80,13 @@ try:
                 # with subsequent calls to the renderer so must be deep-copied if
                 # you wish for it to persist.
                 rgb = eyeRenderer.getFramePointer()[::-1,:,:3] # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
+
                 #convert RGB to BGR
-                bgr = rgb[:, :, ::-1]
+                bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/compound-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video-frames/compound-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
+
             else:
                 #Render the frame
                 renderTime = eyeRenderer.renderFrame()
@@ -93,15 +103,16 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/" + videoName + "/video-frames/panoramic-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/packed-past-scenes/" + videoName + "/video-frames/panoramic-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
-            if j <= 300:
+            if j <= 120:
                 # move forward (0-120 frame)
-                eyeRenderer.translateCameraLocally(0.0, 0.0, 0.2)
+                eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
             else:
                 # rotate 360 degree along y axis (120-240 frame)
                 eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
+
         # Change to the next Camera
         eyeRenderer.nextCamera()
     input("Press enter to exit...")

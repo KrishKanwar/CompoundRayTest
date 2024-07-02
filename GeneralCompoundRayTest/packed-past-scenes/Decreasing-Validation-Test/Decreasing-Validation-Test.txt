@@ -1,8 +1,4 @@
-300
-Takashi-original-test-scene.gltf
-Takashi
-
-Movement:
+300 frames
             if j <= 120:
                 # move forward (0-120 frame)
                 eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
