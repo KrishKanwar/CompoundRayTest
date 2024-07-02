@@ -141,7 +141,7 @@
 			"extras":{
 				"compound-eye":"true",
 				"compound-projection":"spherical_orientationwise",
-				"compound-structure":"validation-test-smaller-data.eye"
+				"compound-structure":"validation_test_smaller_data.eye"
 			},
 			"name":"insect-eye-spherical-projector",
 			"perspective":{

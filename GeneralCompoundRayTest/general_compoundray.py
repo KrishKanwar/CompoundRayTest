@@ -13,18 +13,19 @@ from threading import Timer
 
 import eyeRendererHelperFunctions as eyeTools
 
-# # set working dir
-# import os
-# os.chdir('../')
+# set working dir
+import os
+os.chdir('../')
 
-# # Read in input txt file and set to variables
-# file = open("GeneralCompoundRayTest/GeneralCompoundRay.txt", "r")
-# videoFrames = int(file.readline())
-# blenderFile = str(file.readline())
-# print("blenderFile: ", blenderFile)
-# videoName = file.readline()
+# Read in input txt file and set to variables
+file = open("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt", "r")
+videoFrames = int(file.readline())
+blenderFile = str(file.readline())
+print("blenderFile: ", blenderFile)
+videoName = str(file.readline())
+print(videoName)
 
-videoName = "SimplifiedDemonstrations"
+#videoName = "TroubleShooting"
 blenderFile = ""
 videoFrames = 300
 
@@ -34,10 +35,10 @@ videoFrames = 300
 #print(gltfPath)
 
 # Create folder for video frames and video to be saved to
-if not os.path.exists("GeneralCompoundRayTest/OldScenes/" + videoName + "/VideoFrames"):
-    os.makedirs("GeneralCompoundRayTest/OldScenes/" + videoName + "/VideoFrames")
-# if not os.path.exists("GeneralCompoundRayTest/OldScenes/" + videoName + "/video"):
-#     os.makedirs("GeneralCompoundRayTest/OldScenes/" + videoName + "/video")
+if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames"):
+    os.makedirs("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames")
+# if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/video"):
+#     os.makedirs("GeneralCompoundRayTest/Scenes/" + videoName + "/video")
 
 try:
     #load the compound-ray library
@@ -50,7 +51,7 @@ try:
 
     #Load the modified example scene
     # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/OldScenes/SimplifiedDemonstrations/simplified_demonstrations.gltf"), 'utf-8')))
+    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.gltf"), 'utf-8')))
     # scene = os.path.expanduser(os.path.expanduser(gltfPath))
     # scene = bytes(scene, 'utf-8')
     # scene = c_char_p(scene)
@@ -84,7 +85,7 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/OldScenes/" + videoName + "/VideoFrames/compound-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/compound-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
 
             else:
@@ -103,7 +104,7 @@ try:
                 #convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
                 #write the frame to the output video
-                image_name = "GeneralCompoundRayTest/OldScenes/" + videoName + "/VideoFrames/panoramic-eye-frame"+str(j)+".jpg"
+                image_name = "GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames/panoramic-eye-frame"+str(j)+".jpg"
                 cv2.imwrite(image_name, bgr)
             
             if j <= 120:
