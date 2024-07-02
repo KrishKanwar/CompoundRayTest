@@ -1,7 +1,7 @@
 [variables]
 videoFrames: 300
-blenderFile: trouble_shooting.gltf
-videoName: TroubleShooting
+blenderFile: default_scene.gltf
+videoName: DefaultScene
 
 [Section 2]
 Movement:

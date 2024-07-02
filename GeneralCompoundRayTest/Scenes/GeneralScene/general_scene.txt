@@ -1,7 +1,9 @@
-300
-Takashi-original-test-scene.gltf
-Takashi
+[variables]
+videoFrames: 300
+blenderFile: general_scene.gltf
+videoName: GeneralScene
 
+[Section 2]
 Movement:
             if j <= 120:
                 # move forward (0-120 frame)

@@ -15,9 +15,18 @@ from threading import Timer
 
 import eye_renderer_helper_functions as eyeTools
 
+import configparser
+
+config = configparser.ConfigParser()
+config.read("GeneralCompoundRayTest/Scenes/DefaultScene/default_scene.txt")
+
+videoFrames = int(config.get("variables", "videoFrames"))
+blenderFile = config.get("variables", "blenderFile")
+videoName = config.get("variables", "videoName")
+
 # Makes sure we have a "TestVideos" folder
-if not os.path.exists("DataExtraction/TestVideos"):
-    os.mkdir("DataExtraction/TestVideos")
+if not os.path.exists("DataExtraction/Scenes/" + videoName + "/TestVideos"):
+    os.mkdir("DataExtraction/Scenes/" + videoName + "/TestVideos")
 
 try:
     # load the compound-ray library
@@ -31,10 +40,7 @@ try:
 
     # Load the modified example scene
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtraction/validation_test_smaller_extraction.gltf"), 'utf-8')))
-    
-    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-    #        "~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
+        "~/Documents/GitHub/CompoundRayTests/DataExtraction/Scenes/" + videoName + "/" + blenderFile), 'utf-8')))
     
     # Set the frame size.
     renderWidth = 1551
@@ -45,7 +51,7 @@ try:
     eyeRenderer.getFramePointer.restype = ndpointer(
         dtype=c_ubyte, shape=(renderHeight, renderWidth, 4))
     
-    video_name = "DataExtraction/TestVideos/test_video_"+str(0)+".mp4"
+    video_name = "DataExtraction/Scenes/" + videoName + "/TestVideos/test_video_" + str(0) + ".mp4"
     video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
 
     # Switch to insect-eye-fast-vector camera (extracts data)
@@ -88,13 +94,6 @@ try:
 
         frame_ommatid_data.append(ommatid_data)
 
-        if (j == 90):
-            frame100_ommatid_data = ommatid_data
-
-        # i = 0
-        # rgb = eyeRenderer.getFramePointer()[:, :, :3]
-        # col = rgb[0, i]  # i: an index of ommatidium
-
         if j <= 300:
             eyeRenderer.translateCameraLocally(
                 0.0, 0.0, 0.2)  # move forward (0-120 frame)
@@ -116,22 +115,11 @@ try:
     print(frame_ommatid_data)
     print(frame_ommatid_data.shape)
 
-    # with open('DataExtractionTest/extraction_test.pkl', 'wb') as f:  # open a text file
-    #     pickle.dump(frame_ommatid_data, f) # serialize the list
-    #     f.close()
-
-    # a = {'hello': 'world'}
-
     with open('MotionDetector/extraction_test.pkl', 'wb') as handle:
         pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    # with open('MotionDetector/extraction_test.pkl', 'rb') as handle:
-    #     b = pickle.load(handle)
-
-    # print(frame_ommatid_data == b)
-
-    ommatid_data = frame100_ommatid_data
-    np.savetxt("DataExtraction/ommatid_data.csv", ommatid_data, delimiter=",")
+    # ommatid_data = frame100_ommatid_data
+    # np.savetxt("DataExtraction/ommatid_data.csv", ommatid_data, delimiter=",")
 
 except Exception as e:
     print(e)

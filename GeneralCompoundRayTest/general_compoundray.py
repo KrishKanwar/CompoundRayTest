@@ -19,34 +19,16 @@ import configparser
 # import os
 # os.chdir('../')
 
-# Read in input txt file and set to variables
-# file = open("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt", "r")
-# entire_file = file.read().splitlines()
-# videoFrames = int(entire_file[0])
-# blenderFile = str(entire_file[1])
-# videoName = str(entire_file[2])
-
-# #videoName = "TroubleShooting"
-# blenderFile = ""
-# videoFrames = 300
-
 config = configparser.ConfigParser()
-config.read("GeneralCompoundRayTest/Scenes/TroubleShooting/trouble_shooting.txt")
+config.read("GeneralCompoundRayTest/Scenes/GeneralScene/general_scene.txt")
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
 
-#gltfPath = os.path.join("~/Documents/GitHub/CompoundRayTests/DataExtraction/validation-test-smaller-extraction.gltf")
-
-#print(type(gltfPath))
-#print(gltfPath)
-
 # Create folder for video frames and video to be saved to
 if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames"):
     os.makedirs("GeneralCompoundRayTest/Scenes/" + videoName + "/VideoFrames")
-# if not os.path.exists("GeneralCompoundRayTest/Scenes/" + videoName + "/video"):
-#     os.makedirs("GeneralCompoundRayTest/Scenes/" + videoName + "/video")
 
 try:
     #load the compound-ray library
@@ -60,12 +42,7 @@ try:
     #Load the modified example scene
     # eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/Takashi-Test/Takashi-original-test-scene.gltf"), 'utf-8')))
     eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser("~/Documents/GitHub/CompoundRayTests/GeneralCompoundRayTest/Scenes/" + videoName + "/" + blenderFile), 'utf-8')))
-    # scene = os.path.expanduser(os.path.expanduser(gltfPath))
-    # scene = bytes(scene, 'utf-8')
-    # scene = c_char_p(scene)
-    # eyeRenderer.loadGlTFscene(scene)
-    # print("break")
-    #eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(gltfPath), 'utf-8')))
+
 
     #Set the frame size.
     renderWidth = 400
