@@ -17,12 +17,18 @@ import eye_renderer_helper_functions as eyeTools
 
 import configparser
 
+# # set working dir
+# import os
+# os.chdir('../')
+
 config = configparser.ConfigParser()
-config.read("GeneralCompoundRayTest/Scenes/DefaultScene/default_scene.txt")
+config.read("DataExtraction/Scenes/DefaultScene/default_scene.txt")
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
+
+movement_data = config.items("movement")
 
 # Makes sure we have a "TestVideos" folder
 if not os.path.exists("DataExtraction/Scenes/" + videoName + "/TestVideos"):
@@ -69,7 +75,7 @@ try:
     frame_ommatid_data = []
     frame100_ommatid_data = []
 
-    for j in range(300):
+    for j in range(videoFrames):
 
         eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
         renderTime = eyeRenderer.renderFrame()  # Render the frame
@@ -94,13 +100,11 @@ try:
 
         frame_ommatid_data.append(ommatid_data)
 
-        if j < 300:
-            eyeRenderer.translateCameraLocally(
-                0.0, 0.0, 0.2)  # move forward (0-120 frame)
-        else:
-            # rotate 360 degree along y axis (120-240 frame)
-            eyeRenderer.rotateCameraLocallyAround(
-                3.0 / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
+        # Movement function
+        for k in range(len(movement_data)):
+            if j<=int(movement_data[k][0]):
+                eval(movement_data[k][1])
+                break
 
     input("Press enter to exit...")
     # Finally, stop the eye renderer

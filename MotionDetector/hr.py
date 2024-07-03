@@ -181,77 +181,75 @@ final_result_3D_left = np.array(final_result_3D_left)
 with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
     pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+# from matplotlib import pyplot as plt
+# final_result_3D_left_nolpf = np.array(final_result_3D_left_nolpf)
 
+# i = 350
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+# ax.plot(left_ommatid_values[:,i])
+# ax.plot(left_ommatid_values_lpf[:,i])
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,0,:], color='red')
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,1,:], color='green')
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,2,:], color='black')
 
-from matplotlib import pyplot as plt
-final_result_3D_left_nolpf = np.array(final_result_3D_left_nolpf)
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,0]/1e2, color='red')
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,1], color='green')
+# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,2]/1e2, color='black')
+# np.array(final_result_3D_left_nolpf)[i,:,2].argmax()
+# # final_result_3D_left_nolpf[i,56,2]
 
-i = 350
-fig, ax = plt.subplots(1, figsize=(8, 6))
-ax.plot(left_ommatid_values[:,i])
-ax.plot(left_ommatid_values_lpf[:,i])
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,0,:], color='red')
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,1,:], color='green')
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,2,:], color='black')
+# f_max = 56
+# fig, ax = plt.subplots(1, figsize=(8, 6))
 
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,:,0]/1e2, color='red')
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,:,1], color='green')
-# ax.plot(np.array(final_result_3D_left_nolpf)[i,:,2]/1e2, color='black')
-np.array(final_result_3D_left_nolpf)[i,:,2].argmax()
-# final_result_3D_left_nolpf[i,56,2]
+# ax.plot(left_ommatid_values[56,:])
+# ax.plot(left_ommatid_values_lpf[56,:])
+# # ommatid1 = left_adjacent_ommatid_locations[:, 1]
+# # ommatid2 = left_adjacent_ommatid_locations[:, 2]
+# # ommatid3 = left_adjacent_ommatid_locations[:, 3]
+# # ommatid4 = left_adjacent_ommatid_locations[:, 4]
+# # ommatid5 = left_adjacent_ommatid_locations[:, 5]
+# # ommatid6 = left_adjacent_ommatid_locations[:, 6]
+# ommatid_indicies = [350,376,377,351,324,321,346]
+# fig, ax = plt.subplots(1, figsize=(8, 6))
 
-f_max = 56
-fig, ax = plt.subplots(1, figsize=(8, 6))
+# # for i in range(left_adjacent_ommatid_locations.shape[1]-1):
+# #     ommatid_indicies.append([i+1])
 
-ax.plot(left_ommatid_values[56,:])
-ax.plot(left_ommatid_values_lpf[56,:])
-# ommatid1 = left_adjacent_ommatid_locations[:, 1]
-# ommatid2 = left_adjacent_ommatid_locations[:, 2]
-# ommatid3 = left_adjacent_ommatid_locations[:, 3]
-# ommatid4 = left_adjacent_ommatid_locations[:, 4]
-# ommatid5 = left_adjacent_ommatid_locations[:, 5]
-# ommatid6 = left_adjacent_ommatid_locations[:, 6]
-ommatid_indicies = [350,376,377,351,324,321,346]
-fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# for i in range(left_adjacent_ommatid_locations.shape[1]-1):
-#     ommatid_indicies.append([i+1])
-
-print(ommatid_indicies)
-# ax.plot(left_ommatid_values[14, :])
-# ax.plot(left_ommatid_values_lpf[14, :])
-# ax.plot(left_ommatid_values[14, ommatid_indicies])
-# ax.plot(left_ommatid_values_lpf[14, ommatid_indicies])
-frame_array = []
-for i in range(10):
-    frame_array.append(i+110)
-fig, ax = plt.subplots(1, figsize=(8, 6))
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[1]], color = 'b')
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[3]], color = 'y')
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[5]], color = 'g')
-ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[0]], color = 'r')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[1]], color = 'b')
-ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[3]], color = 'y')
-ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[5]], color = 'g')
-
-fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# ax.plot(final_result_3D_left_nolpf[350, 0:120, 0], color = 'b')
-# ax.plot(final_result_3D_left_nolpf[350, 0:120, 2], color = 'y')
-# ax.plot(final_result_3D_left_nolpf[350, 0:120, 4], color = 'g')
-
-ax.plot(final_result_3D_left[350, 0, 100:120], color = 'b')
-ax.plot(final_result_3D_left[350, 2, 100:120], color = 'y')
-ax.plot(final_result_3D_left[350, 4, 100:120], color = 'g')
-
-
-
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[2]], color = 'b')
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[4]], color = 'y')
-# ax.plot(left_ommatid_values[frame_array, ommatid_indicies[6]], color = 'g')
+# print(ommatid_indicies)
+# # ax.plot(left_ommatid_values[14, :])
+# # ax.plot(left_ommatid_values_lpf[14, :])
+# # ax.plot(left_ommatid_values[14, ommatid_indicies])
+# # ax.plot(left_ommatid_values_lpf[14, ommatid_indicies])
+# frame_array = []
+# for i in range(10):
+#     frame_array.append(i+110)
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
+# # # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[1]], color = 'b')
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[3]], color = 'y')
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[5]], color = 'g')
 # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[0]], color = 'r')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[2]], color = 'b')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[4]], color = 'y')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[6]], color = 'g')
+# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[1]], color = 'b')
+# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[3]], color = 'y')
+# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[5]], color = 'g')
+
+# fig, ax = plt.subplots(1, figsize=(8, 6))
+
+# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 0], color = 'b')
+# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 2], color = 'y')
+# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 4], color = 'g')
+
+# ax.plot(final_result_3D_left[350, 0, 100:120], color = 'b')
+# ax.plot(final_result_3D_left[350, 2, 100:120], color = 'y')
+# ax.plot(final_result_3D_left[350, 4, 100:120], color = 'g')
+
+
+
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[2]], color = 'b')
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[4]], color = 'y')
+# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[6]], color = 'g')
+# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[0]], color = 'r')
+# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[2]], color = 'b')
+# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[4]], color = 'y')
+# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[6]], color = 'g')
