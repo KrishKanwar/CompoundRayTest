@@ -30,13 +30,13 @@ with open("MotionDetector/final_result_3D_left.pkl", "rb") as handle:
 from geometry_copy import cart2sph, sph2cart
 
 # read in eyemap data, column 3:6 are [vx vy vz] viewing directions
-data = np.genfromtxt("Projection2D/data_extraction_test_data.csv", delimiter=",")
+data = np.genfromtxt("default_eye_data.csv", delimiter=",")
 # data = np.genfromtxt('../Projection2D/data_extraction_test_data.csv', delimiter=',')
 pts = data[1:787, 3:6]
-ommatid_data = np.genfromtxt("Projection2D/ommatid_data.csv", delimiter=",")
-# ommatid_data = np.genfromtxt('../Projection2D/ommatid_data.csv', delimiter=',')
-plot_colors = ommatid_data[0:786] / 255.0
-print(plot_colors)
+# ommatid_data = np.genfromtxt("Projection2D/ommatid_data.csv", delimiter=",")
+# # ommatid_data = np.genfromtxt('../Projection2D/ommatid_data.csv', delimiter=',')
+# plot_colors = ommatid_data[0:786] / 255.0
+# print(plot_colors)
 
 # convert to spherical coordinate in [r=1, theta, phi] in radian
 xyz = pts
@@ -193,7 +193,7 @@ for g in range(300):
 
         # plt.show()
         plt.savefig(
-            "MotionDetector/HR_Figures/"
+            "HR_Figures/"
             + str(g)
             + "-frame,"
             + str(h)
