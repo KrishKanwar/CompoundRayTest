@@ -37,17 +37,29 @@ if not os.path.exists("DataExtraction/Scenes/" + videoName + "/TestVideos"):
 try:
     # load the compound-ray library
     print("loading the compound-ray library")
-    eyeRenderer = CDLL(os.path.expanduser(
-        "~/compound-ray/build/make/lib/libEyeRenderer3.so"))
+    eyeRenderer = CDLL(
+        os.path.expanduser("~/compound-ray/build/make/lib/libEyeRenderer3.so")
+    )
     print("Successfully loaded ", eyeRenderer)
 
     # Configure the renderer's function outputs and inputs
     eyeTools.configureFunctions(eyeRenderer)
 
     # Load the modified example scene
-    eyeRenderer.loadGlTFscene(c_char_p(bytes(os.path.expanduser(
-        "~/Documents/GitHub/CompoundRayTests/DataExtraction/Scenes/" + videoName + "/" + blenderFile), 'utf-8')))
-    
+    eyeRenderer.loadGlTFscene(
+        c_char_p(
+            bytes(
+                os.path.expanduser(
+                    "~/Documents/GitHub/CompoundRayTests/DataExtraction/Scenes/"
+                    + videoName
+                    + "/"
+                    + blenderFile
+                ),
+                "utf-8",
+            )
+        )
+    )
+
     # Set the frame size.
     renderWidth = 1551
     renderHeight = 400
@@ -55,10 +67,22 @@ try:
 
     # restype (result type) = RGBA 24bit
     eyeRenderer.getFramePointer.restype = ndpointer(
-        dtype=c_ubyte, shape=(renderHeight, renderWidth, 4))
-    
-    video_name = "DataExtraction/Scenes/" + videoName + "/TestVideos/test_video_" + str(0) + ".mp4"
-    video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('m','p','4','v'), 20, (renderWidth, renderHeight))
+        dtype=c_ubyte, shape=(renderHeight, renderWidth, 4)
+    )
+
+    video_name = (
+        "DataExtraction/Scenes/"
+        + videoName
+        + "/TestVideos/test_video_"
+        + str(0)
+        + ".mp4"
+    )
+    video = cv2.VideoWriter(
+        video_name,
+        cv2.VideoWriter_fourcc("m", "p", "4", "v"),
+        20,
+        (renderWidth, renderHeight),
+    )
 
     # Switch to insect-eye-fast-vector camera (extracts data)
     eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-fast-vector"))
@@ -82,27 +106,29 @@ try:
 
         eyeRenderer.displayFrame()
 
-        rgb = eyeRenderer.getFramePointer()[::,:,:3] # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
-        
+        rgb = eyeRenderer.getFramePointer()[
+            ::, :, :3
+        ]  # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
+
         ommatid_data = []
 
         for i in range(1551):
-            old_col = rgb[0,i] # i: an index of ommatidium
+            old_col = rgb[0, i]  # i: an index of ommatidium
             col = np.array(old_col)
             new_col = col.astype(float)
-            grey_scale = new_col[0]*0.299 + new_col[1]*0.587 + new_col[2]*0.114
+            grey_scale = new_col[0] * 0.299 + new_col[1] * 0.587 + new_col[2] * 0.114
             ommatid_data.append(grey_scale)
 
-        #convert RGB to BGR
+        # convert RGB to BGR
         bgr = rgb[:, :, ::-1]
-        #write the frame to the output video
+        # write the frame to the output video
         video.write(bgr)
 
         frame_ommatid_data.append(ommatid_data)
 
         # Movement function
         for k in range(len(movement_data)):
-            if j<=int(movement_data[k][0]):
+            if j <= int(movement_data[k][0]):
                 eval(movement_data[k][1])
                 break
 
@@ -115,11 +141,11 @@ try:
 
     print(ommatid_data)
     print(ommatid_data.shape)
-    
+
     print(frame_ommatid_data)
     print(frame_ommatid_data.shape)
 
-    with open('MotionDetector/extraction_test.pkl', 'wb') as handle:
+    with open("MotionDetector/extraction_test.pkl", "wb") as handle:
         pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     # ommatid_data = frame100_ommatid_data
