@@ -70,16 +70,6 @@ try:
         dtype=c_ubyte, shape=(renderHeight, renderWidth, 4)
     )
 
-    video_name = (
-        "Frames/" + videoName + "/data_extraction_frames/test_video_" + str(0) + ".mp4"
-    )
-    video = cv2.VideoWriter(
-        video_name,
-        cv2.VideoWriter_fourcc("m", "p", "4", "v"),
-        20,
-        (renderWidth, renderHeight),
-    )
-
     # Switch to insect-eye-fast-vector camera (extracts data)
     eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-fast-vector"))
 
@@ -118,7 +108,10 @@ try:
         # convert RGB to BGR
         bgr = rgb[:, :, ::-1]
         # write the frame to the output video
-        video.write(bgr)
+        image_name = (
+            "Frames/" + videoName + "/data_extraction_frames/def" + str(j) + ".jpg"
+        )
+        cv2.imwrite(image_name, bgr)
 
         frame_ommatid_data.append(ommatid_data)
 
