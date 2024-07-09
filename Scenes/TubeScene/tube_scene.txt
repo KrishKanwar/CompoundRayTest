@@ -1,7 +1,7 @@
 [variables]
 videoFrames: 300
-blenderFile: default_scene.gltf
-videoName: DefaultScene
+blenderFile: tube_scene.gltf
+videoName: TubeScene
 
 [movement]
 299: eyeRenderer.translateCameraLocally(0.0, 0.0, 0.2)

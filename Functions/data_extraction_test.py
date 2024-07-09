@@ -22,7 +22,7 @@ import configparser
 # os.chdir('../')
 
 config = configparser.ConfigParser()
-config.read("DataExtraction/Scenes/DefaultScene/default_scene.txt")
+config.read("Scenes/TubeScene/tube_scene.txt")
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
@@ -31,8 +31,8 @@ videoName = config.get("variables", "videoName")
 movement_data = config.items("movement")
 
 # Makes sure we have a "TestVideos" folder
-if not os.path.exists("DataExtraction/Scenes/" + videoName + "/TestVideos"):
-    os.mkdir("DataExtraction/Scenes/" + videoName + "/TestVideos")
+if not os.path.exists("Frames/" + videoName + "/data_extraction_frames"):
+    os.makedirs("Frames/" + videoName + "/data_extraction_frames")
 
 try:
     # load the compound-ray library
@@ -50,7 +50,7 @@ try:
         c_char_p(
             bytes(
                 os.path.expanduser(
-                    "~/Documents/GitHub/CompoundRayTests/DataExtraction/Scenes/"
+                    "~/Documents/GitHub/CompoundRayTests/Scenes/"
                     + videoName
                     + "/"
                     + blenderFile
@@ -71,11 +71,7 @@ try:
     )
 
     video_name = (
-        "DataExtraction/Scenes/"
-        + videoName
-        + "/TestVideos/test_video_"
-        + str(0)
-        + ".mp4"
+        "Frames/" + videoName + "/data_extraction_frames/test_video_" + str(0) + ".mp4"
     )
     video = cv2.VideoWriter(
         video_name,
