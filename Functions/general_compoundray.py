@@ -20,7 +20,7 @@ import configparser
 # os.chdir('../')
 
 config = configparser.ConfigParser()
-config.read("Scenes/TubeScene/tube_scene.txt")
+config.read("Scenes/GeneralScene/general_scene.txt")
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
