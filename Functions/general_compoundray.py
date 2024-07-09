@@ -29,8 +29,11 @@ videoName = config.get("variables", "videoName")
 movement_data = config.items("movement")
 
 # Create folder for video frames and video to be saved to
-if not os.path.exists("Scenes/" + videoName + "/VideoFrames"):
-    os.makedirs("Scenes/" + videoName + "/VideoFrames")
+if not os.path.exists("Frames/" + videoName + "/compound_eye_frames"):
+    os.makedirs("Frames/" + videoName + "/compound_eye_frames")
+
+if not os.path.exists("Frames/" + videoName + "/panoramic_eye_frames"):
+    os.makedirs("Frames/" + videoName + "/panoramic_eye_frames")
 
 try:
     # load the compound-ray library
@@ -98,11 +101,7 @@ try:
                 bgr = rightWayUp[:, :, ::-1]
                 # write the frame to the output video
                 image_name = (
-                    "Scenes/"
-                    + videoName
-                    + "/VideoFrames/compound_eye_frame"
-                    + str(j)
-                    + ".jpg"
+                    "Frames/" + videoName + "/compound_eye_frames/cef" + str(j) + ".jpg"
                 )
                 cv2.imwrite(image_name, bgr)
 
@@ -125,9 +124,9 @@ try:
                 bgr = rightWayUp[:, :, ::-1]
                 # write the frame to the output video
                 image_name = (
-                    "Scenes/"
+                    "Frames/"
                     + videoName
-                    + "/VideoFrames/panoramic_eye_frame"
+                    + "/panoramic_eye_frames/pef"
                     + str(j)
                     + ".jpg"
                 )
