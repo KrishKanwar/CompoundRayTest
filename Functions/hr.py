@@ -5,11 +5,22 @@ from lowpass_method import low_pass_filter
 
 import pickle
 
+import configparser
+
 # # set working dir
 # import os
 # os.chdir('../')
 
-with open("MotionDetector/extraction_test.pkl", "rb") as handle:
+config = configparser.ConfigParser()
+config.read("Scenes/TubeScene/tube_scene.txt")
+
+videoFrames = int(config.get("variables", "videoFrames"))
+blenderFile = config.get("variables", "blenderFile")
+videoName = config.get("variables", "videoName")
+
+movement_data = config.items("movement")
+
+with open("OutputData/" + videoName + "/i_de.pkl", "rb") as handle:
     # with open('extraction_test.pkl', 'rb') as handle:
     ommatid_data = pickle.load(handle)
 
@@ -21,9 +32,7 @@ left_ommatid_values = ommatid_data[:, 0:786]
 right_ommatid_values = ommatid_data[:, 786:1552]
 
 # Ommatidia strucure data
-total_ommatid_data = np.genfromtxt(
-    "MotionDetector/lens_opticAxis_acceptance.csv", delimiter=","
-)
+total_ommatid_data = np.genfromtxt("default_eye_data.csv", delimiter=",")
 # total_ommatid_data = np.genfromtxt('lens_opticAxis_acceptance.csv', delimiter=',')
 
 # Split eyes
@@ -34,7 +43,7 @@ print(left_ommatid_data)
 print(right_ommatid_data)
 
 # Indexs of neighbors
-adjacent_ommatid_locations = np.genfromtxt("MotionDetector/ind_nb.csv", delimiter=",")
+adjacent_ommatid_locations = np.genfromtxt("ind_nb.csv", delimiter=",")
 # adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
 
 left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
@@ -217,7 +226,7 @@ final_result_3D_left = np.array(final_result_3D_left)
 # print(final_result_3D_left)
 
 # with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
-with open("MotionDetector/final_result_3D_left.pkl", "wb") as handle:
+with open("OutputData/" + videoName + "/f_de.pkl", "wb") as handle:
     pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # from matplotlib import pyplot as plt

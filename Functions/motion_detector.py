@@ -1,23 +1,37 @@
-# %%
 # plotting setup
 # matplotlib
 import matplotlib.pyplot as plt
 
-# %%
 import numpy as np
 from cmath import pi
+import os
+
 
 # import pandas as pd
 
 import pickle
 
+import configparser
+
 # # set working dir
 # import os
 # os.chdir('../')
 
-with open("MotionDetector/final_result_3D_left.pkl", "rb") as handle:
+config = configparser.ConfigParser()
+config.read("Scenes/TubeScene/tube_scene.txt")
+
+videoFrames = int(config.get("variables", "videoFrames"))
+blenderFile = config.get("variables", "blenderFile")
+videoName = config.get("variables", "videoName")
+
+movement_data = config.items("movement")
+
+with open("OutputData/" + videoName + "/f_de.pkl", "rb") as handle:
     # with open('final_result_3D_left.pkl', 'rb') as handle:
     final_result_3D = np.array(pickle.load(handle))
+
+if not os.path.exists("OutputData/" + videoName + "/HR_Frames"):
+    os.makedirs("OutputData/" + videoName + "/HR_Frames")
 
 # fig, ax = plt.subplots(1, figsize=(8, 6))
 
@@ -25,7 +39,6 @@ with open("MotionDetector/final_result_3D_left.pkl", "rb") as handle:
 # ax.plot(final_result_3D[350, 2, 100:120], color = 'y')
 # ax.plot(final_result_3D[350, 4, 100:120], color = 'g')
 
-# %%
 # transformation between Cartesian <-> spherical coordinates
 from geometry_copy import cart2sph, sph2cart
 
@@ -42,11 +55,10 @@ pts = data[1:787, 3:6]
 xyz = pts
 rtp_main = cart2sph(xyz)
 
-# %%
 # Mollweide projections, from 3d to 2d
 from geometry_copy import sph2Mollweide
 
-adjacent_ommatid_locations = np.genfromtxt("MotionDetector/ind_nb.csv", delimiter=",")
+adjacent_ommatid_locations = np.genfromtxt("ind_nb.csv", delimiter=",")
 # adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
 
 # define guidelines
@@ -193,7 +205,9 @@ for g in range(300):
 
         # plt.show()
         plt.savefig(
-            "HR_Figures/"
+            "OutputData/"
+            + videoName
+            + "/HR_Frames/"
             + str(g)
             + "-frame,"
             + str(h)

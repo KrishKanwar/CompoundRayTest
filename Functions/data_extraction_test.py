@@ -31,8 +31,8 @@ videoName = config.get("variables", "videoName")
 movement_data = config.items("movement")
 
 # Makes sure we have a "TestVideos" folder
-if not os.path.exists("Frames/" + videoName + "/data_extraction_frames"):
-    os.makedirs("Frames/" + videoName + "/data_extraction_frames")
+if not os.path.exists("OutputData/" + videoName + "/DataExtractionFrames"):
+    os.makedirs("OutputData/" + videoName + "/DataExtractionFrames")
 
 try:
     # load the compound-ray library
@@ -109,7 +109,7 @@ try:
         bgr = rgb[:, :, ::-1]
         # write the frame to the output video
         image_name = (
-            "Frames/" + videoName + "/data_extraction_frames/def" + str(j) + ".jpg"
+            "OutputData/" + videoName + "/DataExtractionFrames/def" + str(j) + ".jpg"
         )
         cv2.imwrite(image_name, bgr)
 
@@ -134,7 +134,7 @@ try:
     print(frame_ommatid_data)
     print(frame_ommatid_data.shape)
 
-    with open("MotionDetector/extraction_test.pkl", "wb") as handle:
+    with open("OutputData/" + videoName + "/i_de.pkl", "wb") as handle:
         pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     # ommatid_data = frame100_ommatid_data
