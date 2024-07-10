@@ -9,6 +9,8 @@ config = configparser.ConfigParser()
 
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
+csvData = config.get("data", "csvData")
+csvNeighbors = config.get("data", "csvNeighbors")
 
 config.read(readPath)
 
@@ -29,8 +31,8 @@ if not os.path.exists("OutputData/" + videoName + "/HR_Frames"):
 from geometry_copy import cart2sph, sph2cart
 
 # read in eyemap data, column 3:6 are [vx vy vz] viewing directions
-data = np.genfromtxt("default_eye_data.csv", delimiter=",")
-pts = data[1:787, 3:6]
+data = np.genfromtxt(csvData, delimiter=",")
+pts = data[778:1555, 3:6]
 
 # convert to spherical coordinate in [r=1, theta, phi] in radian
 xyz = pts
@@ -39,8 +41,7 @@ rtp_main = cart2sph(xyz)
 # Mollweide projections, from 3d to 2d
 from geometry_copy import sph2Mollweide
 
-adjacent_ommatid_locations = np.genfromtxt("ind_nb.csv", delimiter=",")
-# adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
+adjacent_ommatid_locations = np.genfromtxt(csvNeighbors, delimiter=",")
 
 # define guidelines
 ww = np.stack((np.linspace(0, 180, 19), np.repeat(-180, 19)), axis=1)
@@ -170,7 +171,8 @@ for g in range(300):
         plt.plot(s45_xy[:, 0], s45_xy[:, 1], "-k", linewidth=1)
 
         # change scales to 1
-        plt.quiver(xy[:, 0], xy[:, 1], quiver_coord_diff_x, quiver_coord_diff_y)
+        # plt.quiver(xy[:, 0], xy[:, 1], quiver_coord_diff_x, quiver_coord_diff_y)
+        plt.quiver(xy[:, 0], xy[:, 1], 1, 1)
 
         plt.xlabel("azimuth")
         plt.ylabel("elevation")

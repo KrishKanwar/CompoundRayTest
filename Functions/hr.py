@@ -8,34 +8,32 @@ config = configparser.ConfigParser()
 
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
+csvData = config.get("data", "csvData")
+csvNeighbors = config.get("data", "csvNeighbors")
 
 config.read(readPath)
-
-videoFrames = int(config.get("variables", "videoFrames"))
-blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
-
 movement_data = config.items("movement")
 
 with open("OutputData/" + videoName + "/i_de.pkl", "rb") as handle:
     ommatid_data = pickle.load(handle)
 
 # Data extraction data split
-left_ommatid_values = ommatid_data[:, 0:786]
-right_ommatid_values = ommatid_data[:, 786:1552]
+left_ommatid_values = ommatid_data[:, 777:1554]
+right_ommatid_values = ommatid_data[:, 0:777]
 
 # Ommatidia strucure data
-total_ommatid_data = np.genfromtxt("default_eye_data.csv", delimiter=",")
+total_ommatid_data = np.genfromtxt(csvData, delimiter=",")
 
 # Split eyes
-left_ommatid_data = total_ommatid_data[1:787, :]
-right_ommatid_data = total_ommatid_data[787:1553, :]
+left_ommatid_data = total_ommatid_data[778:1555, :]
+right_ommatid_data = total_ommatid_data[1:778, :]
 
 # Indexs of neighbors
-adjacent_ommatid_locations = np.genfromtxt("ind_nb.csv", delimiter=",")
+adjacent_ommatid_locations = np.genfromtxt(csvNeighbors, delimiter=",")
 
-left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
-right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1553, :]
+left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:778, :]
+right_adjacent_ommatid_locations = 0
 
 left_ommatid_values_lpf = []
 right_ommatid_values_lpf = []
@@ -181,11 +179,7 @@ for i in range(
         single_ommatidia_all_frames_lpf_4dir.append(vertical_slice_lpf)
     final_result_3D_left_4dir.append(single_ommatidia_all_frames_lpf_4dir)
 
-print(np.array(final_result_3D_left).shape)
-print(np.array(final_result_3D_left_nolpf).shape)
 print("final", np.array(final_result_3D_left_4dir).shape)
-
-final_result_3D_left = np.array(final_result_3D_left)
 
 with open("OutputData/" + videoName + "/f_de.pkl", "wb") as handle:
     pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)

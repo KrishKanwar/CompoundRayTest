@@ -56,7 +56,7 @@ try:
     )
 
     # Set the frame size.
-    renderWidth = 1551
+    renderWidth = 1554
     renderHeight = 400
     eyeRenderer.setRenderSize(renderWidth, renderHeight)
 
@@ -93,7 +93,7 @@ try:
 
         ommatid_data = []
 
-        for i in range(1551):
+        for i in range(1554):
             old_col = rgb[0, i]  # i: an index of ommatidium
             col = np.array(old_col)
             new_col = col.astype(float)
@@ -122,6 +122,8 @@ try:
     eyeRenderer.stop()
 
     print(np.array(frame_ommatid_data).shape)
+
+    frame_ommatid_data = np.array(frame_ommatid_data)
 
     with open("OutputData/" + videoName + "/i_de.pkl", "wb") as handle:
         pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)

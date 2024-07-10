@@ -38,9 +38,10 @@ from cmath import pi
 from geometry import cart2sph, sph2cart
 
 # read in csv data
-data = np.genfromtxt('lens_opticAxis_acceptance.csv', delimiter=',')
+#data = np.genfromtxt('lens_opticAxis_acceptance.csv', delimiter=',')
+data = np.genfromtxt('lens_opticAxis_20240701.csv', delimiter=',')
 pts = data[700:1552, 3:6]
-ommatid_data = np.genfromtxt('DataExtraction/ommatid_data.csv', delimiter=',')
+ommatid_data = np.genfromtxt('Archive-2024-07-09/ommatid_data.csv', delimiter=',')
 plot_colors = ommatid_data[0:1552]/255.0
 print(plot_colors)
 
@@ -58,7 +59,7 @@ from geometry import sph2Mollweide
 
 # use rtp from earlier
 # pick a few points
-plot_pts = data[1:1552, 3:6]
+plot_pts = data[800:1552, 3:6]
 
 print(plot_pts)
 
@@ -95,7 +96,8 @@ plt.plot(meridians_xy[:,0], meridians_xy[:,1], '-k', linewidth=1.0)
 plt.plot(n45_xy[:,0], n45_xy[:,1], '-k', linewidth=1)
 plt.plot(eq_xy[:,0], eq_xy[:,1], '-k', linewidth=1)
 plt.plot(s45_xy[:,0], s45_xy[:,1], '-k', linewidth=1)
-plt.scatter(xy[:,0], xy[:,1], c = plot_colors)
+# plt.scatter(xy[:,0], xy[:,1], c = 'plot_colors')
+plt.scatter(xy[:,0], xy[:,1], c = 'b')
 plt.xlabel("azimuth")
 plt.ylabel("elevation")
 

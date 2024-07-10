@@ -1,3 +1,4 @@
 [data]
 path: Scenes/TubeScene/tube_scene.txt
-
+csvData: lens_opticAxis_20240701.csv
+csvNeighbors: ind_nb_matched_left_20240701.csv
