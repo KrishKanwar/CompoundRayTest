@@ -1,24 +1,16 @@
-# plotting setup
-# matplotlib
 import matplotlib.pyplot as plt
-
 import numpy as np
 from cmath import pi
 import os
-
-
-# import pandas as pd
-
 import pickle
-
 import configparser
 
-# # set working dir
-# import os
-# os.chdir('../')
-
 config = configparser.ConfigParser()
-config.read("Scenes/TubeScene/tube_scene.txt")
+
+config.read("MetaTxt.txt")
+readPath = config.get("data", "path")
+
+config.read(readPath)
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
@@ -33,23 +25,12 @@ with open("OutputData/" + videoName + "/f_de.pkl", "rb") as handle:
 if not os.path.exists("OutputData/" + videoName + "/HR_Frames"):
     os.makedirs("OutputData/" + videoName + "/HR_Frames")
 
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# ax.plot(final_result_3D[350, 0, 100:120], color = 'b')
-# ax.plot(final_result_3D[350, 2, 100:120], color = 'y')
-# ax.plot(final_result_3D[350, 4, 100:120], color = 'g')
-
 # transformation between Cartesian <-> spherical coordinates
 from geometry_copy import cart2sph, sph2cart
 
 # read in eyemap data, column 3:6 are [vx vy vz] viewing directions
 data = np.genfromtxt("default_eye_data.csv", delimiter=",")
-# data = np.genfromtxt('../Projection2D/data_extraction_test_data.csv', delimiter=',')
 pts = data[1:787, 3:6]
-# ommatid_data = np.genfromtxt("Projection2D/ommatid_data.csv", delimiter=",")
-# # ommatid_data = np.genfromtxt('../Projection2D/ommatid_data.csv', delimiter=',')
-# plot_colors = ommatid_data[0:786] / 255.0
-# print(plot_colors)
 
 # convert to spherical coordinate in [r=1, theta, phi] in radian
 xyz = pts
@@ -82,12 +63,6 @@ rtp = np.insert(pts / 180 * pi, 0, np.repeat(1, pts.shape[0]), axis=1)
 s45_xy = sph2Mollweide(rtp[:, 1:3])
 
 xy = sph2Mollweide(rtp_main[:, 1:3])
-
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# ax.scatter(xy[:, 0], xy[:,1], color = 'b')
-# ax.scatter(xy[351, 0], xy[351, 1], color = 'y')
-# ax.scatter(xy[352, 0], xy[352, 1], color = 'cyan')
 
 for g in range(300):
     for h in range(4):
@@ -180,9 +155,6 @@ for g in range(300):
 
                 vx = vx * final_result_3D[i, h, g]
                 vy = vy * final_result_3D[i, h, g]
-
-                # vx = (vx/100)+1
-                # vy = (vx/100)+1
 
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)

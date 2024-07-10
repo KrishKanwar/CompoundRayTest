@@ -5,24 +5,19 @@ from ctypes import *
 from sys import platform
 from numpy.ctypeslib import ndpointer
 import numpy as np
-
 from PIL import Image
 import cv2
-
 import pickle
-
 from threading import Timer
-
 import eye_renderer_helper_functions as eyeTools
-
 import configparser
 
-# # set working dir
-# import os
-# os.chdir('../')
-
 config = configparser.ConfigParser()
-config.read("Scenes/TubeScene/tube_scene.txt")
+
+config.read("MetaTxt.txt")
+readPath = config.get("data", "path")
+
+config.read(readPath)
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
@@ -107,6 +102,7 @@ try:
 
         # convert RGB to BGR
         bgr = rgb[:, :, ::-1]
+
         # write the frame to the output video
         image_name = (
             "OutputData/" + videoName + "/DataExtractionFrames/def" + str(j) + ".jpg"
@@ -125,14 +121,7 @@ try:
     # Finally, stop the eye renderer
     eyeRenderer.stop()
 
-    ommatid_data = np.array(ommatid_data)
-    frame_ommatid_data = np.array(frame_ommatid_data)
-
-    print(ommatid_data)
-    print(ommatid_data.shape)
-
-    print(frame_ommatid_data)
-    print(frame_ommatid_data.shape)
+    print(np.array(frame_ommatid_data).shape)
 
     with open("OutputData/" + videoName + "/i_de.pkl", "wb") as handle:
         pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)

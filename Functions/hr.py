@@ -1,18 +1,15 @@
 import numpy as np
 from cmath import pi
-
 from lowpass_method import low_pass_filter
-
 import pickle
-
 import configparser
 
-# # set working dir
-# import os
-# os.chdir('../')
-
 config = configparser.ConfigParser()
-config.read("Scenes/TubeScene/tube_scene.txt")
+
+config.read("MetaTxt.txt")
+readPath = config.get("data", "path")
+
+config.read(readPath)
 
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
@@ -21,11 +18,7 @@ videoName = config.get("variables", "videoName")
 movement_data = config.items("movement")
 
 with open("OutputData/" + videoName + "/i_de.pkl", "rb") as handle:
-    # with open('extraction_test.pkl', 'rb') as handle:
     ommatid_data = pickle.load(handle)
-
-print(ommatid_data)
-print(ommatid_data.shape)
 
 # Data extraction data split
 left_ommatid_values = ommatid_data[:, 0:786]
@@ -33,24 +26,16 @@ right_ommatid_values = ommatid_data[:, 786:1552]
 
 # Ommatidia strucure data
 total_ommatid_data = np.genfromtxt("default_eye_data.csv", delimiter=",")
-# total_ommatid_data = np.genfromtxt('lens_opticAxis_acceptance.csv', delimiter=',')
 
 # Split eyes
 left_ommatid_data = total_ommatid_data[1:787, :]
 right_ommatid_data = total_ommatid_data[787:1553, :]
 
-print(left_ommatid_data)
-print(right_ommatid_data)
-
 # Indexs of neighbors
 adjacent_ommatid_locations = np.genfromtxt("ind_nb.csv", delimiter=",")
-# adjacent_ommatid_locations = np.genfromtxt('ind_nb.csv', delimiter=',')
 
 left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
 right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1553, :]
-
-print(left_adjacent_ommatid_locations)
-print(right_adjacent_ommatid_locations)
 
 left_ommatid_values_lpf = []
 right_ommatid_values_lpf = []
@@ -66,17 +51,6 @@ for i in range(right_ommatid_values.shape[1]):
     u = right_ommatid_values[:, i]
     yf = low_pass_filter(t, u, 0.03)
     right_ommatid_values_lpf.append(yf)
-
-
-# t = np.linspace(0, 1.5, 30)
-# u = left_ommatid_values[:, 0]
-
-# yf = low_pass_filter(t, u)
-# print(yf)
-
-# print(yf.shape)
-
-# print(np.array(left_ommatid_values).shape)
 
 left_ommatid_values = np.array(left_ommatid_values)
 left_ommatid_values_lpf = np.array(left_ommatid_values_lpf)
@@ -121,12 +95,7 @@ for i in range(
 
         # iterate over all 6 neighbors
         for k in range(4):
-            # pp = left_adjacent_ommatid_locations[real_i, k+1] - 1
-
             # make sure there is a nb
-            # if(np.isnan(current_ommatid_position[]) or np.isnan(pp)):
-            #     comparison_value = np.nan
-            # compare neighbors
             nan_flag = False
             for z in range(7):
                 co = current_ommatid_positions[z]
@@ -141,11 +110,6 @@ for i in range(
                 single_ommatidia_single_frame.append(np.nan)
             else:
                 if k == 0:
-                    # lp0 = np.mean(left_ommatid_values_lpf[j, int(current_ommatid_positions[0])], left_ommatid_values_lpf[j, int(current_ommatid_positions[2])], left_ommatid_values_lpf[j, int(current_ommatid_positions[5])])
-                    # n1 = np.mean(left_ommatid_values[j, int(current_ommatid_positions[3])], left_ommatid_values[j, int(current_ommatid_positions[4])])
-
-                    # lp1 = np.mean(left_ommatid_values_lpf[j, int(current_ommatid_positions[3])], left_ommatid_values_lpf[j, int(current_ommatid_positions[4])])
-                    # n0 = np.mean(left_ommatid_values[j, int(current_ommatid_positions[2])], left_ommatid_values[j, int(current_ommatid_positions[0])], left_ommatid_values[j, int(current_ommatid_positions[5])])
                     lp0 = (
                         left_ommatid_values_lpf[j, int(current_ommatid_positions[0])]
                         + left_ommatid_values_lpf[j, int(current_ommatid_positions[2])]
@@ -223,9 +187,6 @@ print("final", np.array(final_result_3D_left_4dir).shape)
 
 final_result_3D_left = np.array(final_result_3D_left)
 
-# print(final_result_3D_left)
-
-# with open('MotionDetector/final_result_3D_left.pkl', 'wb') as handle:
 with open("OutputData/" + videoName + "/f_de.pkl", "wb") as handle:
     pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 

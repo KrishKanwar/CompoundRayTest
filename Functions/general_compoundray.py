@@ -5,27 +5,21 @@ from ctypes import *
 from sys import platform
 from numpy.ctypeslib import ndpointer
 import numpy as np
-
 from PIL import Image
 import cv2
-
 from threading import Timer
-
 import eye_renderer_helper_functions as eyeTools
-
 import configparser
 
-# # set working dir
-# import os
-# os.chdir('../')
-
 config = configparser.ConfigParser()
-config.read("Scenes/GeneralScene/general_scene.txt")
 
+config.read("MetaTxt.txt")
+readPath = config.get("data", "path")
+
+config.read(readPath)
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
-
 movement_data = config.items("movement")
 
 # Create folder for video frames and video to be saved to
@@ -66,6 +60,7 @@ try:
     renderWidth = 400
     renderHeight = 400
     eyeRenderer.setRenderSize(renderWidth, renderHeight)
+
     # restype (result type) = RGBA 24bit
     eyeRenderer.getFramePointer.restype = ndpointer(
         dtype=c_ubyte, shape=(renderHeight, renderWidth, 4)
@@ -86,6 +81,7 @@ try:
             if eyeRenderer.isCompoundEyeActive():
                 eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
                 renderTime = eyeRenderer.renderFrame()  # Render the frame
+
                 # display the frame in the renderer
                 eyeRenderer.displayFrame()
 
@@ -99,6 +95,7 @@ try:
 
                 # convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
+
                 # write the frame to the output video
                 image_name = (
                     "OutputData/"
@@ -126,6 +123,7 @@ try:
 
                 # convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
+
                 # write the frame to the output video
                 image_name = (
                     "OutputData/"
@@ -143,10 +141,8 @@ try:
                     eval(movement_data[k][1])
                     break
 
-        # Change to the next Camera
-        # eyeRenderer.nextCamera()
-
     input("Press enter to exit...")
+
     # Finally, stop the eye renderer
     eyeRenderer.stop()
 
