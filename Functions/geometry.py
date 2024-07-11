@@ -67,6 +67,7 @@ def sph2Mollweide(thetaphi: np.array) -> np.array:
                 2 * np.sqrt(2) / np.pi * azim[i] * np.cos(theta),
                 np.sqrt(2) * np.sin(theta),
             ]
+    xy[:, 0] = -1*xy[:, 0]
     return xy
 
 

@@ -10,25 +10,31 @@ config = configparser.ConfigParser()
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
 csvData = config.get("data", "csvData")
-csvNeighbors = config.get("data", "csvNeighbors")
+csvNeighborsLeft = config.get("data", "csvNeighborsLeft")
+csvNeighborsRight = config.get("data", "csvNeighborsRight")
+direction = int(config.get("data", "direction"))
+
+data = np.genfromtxt(csvData, delimiter=",")
+num_omm_right = data[np.flatnonzero(data[:, 7] == 1), :].shape[0]
+num_omm_left = data[np.flatnonzero(data[:, 7] == 0), :].shape[0]
 
 config.read(readPath)
-
-videoFrames = int(config.get("variables", "videoFrames"))
-blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
 
-movement_data = config.items("movement")
+with open("OutputData/" + videoName + "/f_de_l.pkl", "rb") as handle:
+    final_result_3D_left = np.array(pickle.load(handle))
 
-with open("OutputData/" + videoName + "/f_de.pkl", "rb") as handle:
-    # with open('final_result_3D_left.pkl', 'rb') as handle:
-    final_result_3D = np.array(pickle.load(handle))
+with open("OutputData/" + videoName + "/f_de_r.pkl", "rb") as handle:
+    final_result_3D_right = np.array(pickle.load(handle))
 
-if not os.path.exists("OutputData/" + videoName + "/HR_Frames"):
-    os.makedirs("OutputData/" + videoName + "/HR_Frames")
+if not os.path.exists("OutputData/" + videoName + "/HR_FramesRight"):
+    os.makedirs("OutputData/" + videoName + "/HR_FramesRight")
+
+if not os.path.exists("OutputData/" + videoName + "/HR_FramesLeft"):
+    os.makedirs("OutputData/" + videoName + "/HR_FramesLeft")
 
 # transformation between Cartesian <-> spherical coordinates
-from geometry_copy import cart2sph, sph2cart
+from geometry import cart2sph, sph2cart
 
 # read in eyemap data, column 3:6 are [vx vy vz] viewing directions
 data = np.genfromtxt(csvData, delimiter=",")
@@ -39,9 +45,13 @@ xyz = pts
 rtp_main = cart2sph(xyz)
 
 # Mollweide projections, from 3d to 2d
-from geometry_copy import sph2Mollweide
+from geometry import sph2Mollweide
 
-adjacent_ommatid_locations = np.genfromtxt(csvNeighbors, delimiter=",")
+adjacent_ommatid_locations_left = np.genfromtxt(csvNeighborsLeft, delimiter=",")
+adjacent_ommatid_locations_right = np.genfromtxt(csvNeighborsRight, delimiter=",")
+
+left_adjacent_ommatid_locations = adjacent_ommatid_locations_left[1:, :]
+right_adjacent_ommatid_locations = adjacent_ommatid_locations_right[1:, :]
 
 # define guidelines
 ww = np.stack((np.linspace(0, 180, 19), np.repeat(-180, 19)), axis=1)
@@ -68,14 +78,12 @@ xy = sph2Mollweide(rtp_main[:, 1:3])
 for g in range(300):
     for h in range(4):
         # compute directional arrows
+        
         quiver_coord_diff_x1 = []
         quiver_coord_diff_y1 = []
 
         quiver_coord_diff_x2 = []
         quiver_coord_diff_y2 = []
-
-        left_adjacent_ommatid_locations = adjacent_ommatid_locations[1:787, :]
-        right_adjacent_ommatid_locations = adjacent_ommatid_locations[787:1552, :]
 
         for i in range(xy.shape[0]):
             real_i = np.where(left_adjacent_ommatid_locations[:, 0] == i + 1)[
@@ -154,8 +162,8 @@ for g in range(300):
                 vx = vx / divide_factor
                 vy = vy / divide_factor
 
-                vx = vx * final_result_3D[i, h, g]
-                vy = vy * final_result_3D[i, h, g]
+                vx = vx * final_result_3D_left[i, h, g]
+                vy = vy * final_result_3D_left[i, h, g]
 
                 quiver_coord_diff_x1.append(vx)
                 quiver_coord_diff_y1.append(vy)
@@ -171,8 +179,7 @@ for g in range(300):
         plt.plot(s45_xy[:, 0], s45_xy[:, 1], "-k", linewidth=1)
 
         # change scales to 1
-        # plt.quiver(xy[:, 0], xy[:, 1], quiver_coord_diff_x, quiver_coord_diff_y)
-        plt.quiver(xy[:, 0], xy[:, 1], 1, 1)
+        plt.quiver(xy[:, 0], xy[:, 1], quiver_coord_diff_x, quiver_coord_diff_y)
 
         plt.xlabel("azimuth")
         plt.ylabel("elevation")
@@ -181,7 +188,7 @@ for g in range(300):
         plt.savefig(
             "OutputData/"
             + videoName
-            + "/HR_Frames/"
+            + "/HR_FramesLeft/"
             + str(g)
             + "-frame,"
             + str(h)

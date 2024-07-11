@@ -16,13 +16,16 @@ config = configparser.ConfigParser()
 
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
+csvData = config.get("data", "csvData")
+direction = int(config.get("data", "direction"))
+
+data = np.genfromtxt(csvData, delimiter=",")
+num_omm = data.shape[0]-1
 
 config.read(readPath)
-
 videoFrames = int(config.get("variables", "videoFrames"))
 blenderFile = config.get("variables", "blenderFile")
 videoName = config.get("variables", "videoName")
-
 movement_data = config.items("movement")
 
 # Makes sure we have a "TestVideos" folder
@@ -56,7 +59,7 @@ try:
     )
 
     # Set the frame size.
-    renderWidth = 1554
+    renderWidth = num_omm
     renderHeight = 400
     eyeRenderer.setRenderSize(renderWidth, renderHeight)
 
@@ -93,7 +96,7 @@ try:
 
         ommatid_data = []
 
-        for i in range(1554):
+        for i in range(num_omm):
             old_col = rgb[0, i]  # i: an index of ommatidium
             col = np.array(old_col)
             new_col = col.astype(float)
