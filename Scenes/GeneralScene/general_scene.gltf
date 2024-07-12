@@ -233,7 +233,7 @@
             "extras" : {
                 "compound-eye" : "true",
                 "compound-projection" : "spherical_orientationwise",
-                "compound-structure" : "lens_opticAxis_20240701.eye"
+                "compound-structure" : "InputData/lens_opticAxis_20240701.eye"
             },
             "name" : "insect-eye-spherical-projector",
             "perspective" : {
@@ -247,7 +247,7 @@
         {
             "extras" : {
                 "compound-eye" : "true",
-                "compound-structure" : "lens_opticAxis_20240701.eye",
+                "compound-structure" : "InputData/lens_opticAxis_20240701.eye",
                 "compound-projection" : "spherical_orientationwise_ids"
             },
             "name" : "insect-eye-spherical-projector-ids",
@@ -263,7 +263,7 @@
             "extras" : {
                 "compound-eye" : "true",
                 "compound-projection" : "single_dimension_fast",
-                "compound-structure" : "lens_opticAxis_20240701.eye"
+                "compound-structure" : "InputData/lens_opticAxis_20240701.eye"
             },
             "name" : "insect-eye-fast-vector",
             "perspective" : {

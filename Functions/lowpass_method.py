@@ -8,8 +8,6 @@ def low_pass_filter(t, u, tau):
     # plot the time series
     plt.plot(t, u)
 
-    # plt.show()
-
     # low pass filter
     from scipy.signal import butter, lfilter
 
@@ -47,14 +45,4 @@ def low_pass_filter(t, u, tau):
     plt.plot(t, u, "b-", label="data")
     plt.plot(t, yf, "g-", linewidth=2, label="filtered data")
 
-    # plt.show()
     return yf
-
-
-# # a time series
-# t = np.linspace(0, 1000, 1000)
-
-# # # a sine wave with noise
-# u = np.sin(2*pi*t/100)
-
-# low_pass_filter(t, u)

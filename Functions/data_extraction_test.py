@@ -14,26 +14,28 @@ import configparser
 
 config = configparser.ConfigParser()
 
+# MetaTxt to retrieve csv files and scene txt (later replace with a function)
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
 csvData = config.get("data", "csvData")
 direction = int(config.get("data", "direction"))
 
 data = np.genfromtxt(csvData, delimiter=",")
-num_omm = data.shape[0]-1
+num_omm = data.shape[0] - 1  # get number of ommatidia in complete eye (l & r)
 
+# Read in scene txt
 config.read(readPath)
-videoFrames = int(config.get("variables", "videoFrames"))
-blenderFile = config.get("variables", "blenderFile")
-videoName = config.get("variables", "videoName")
-movement_data = config.items("movement")
+videoFrames = int(config.get("variables", "videoFrames"))  # number of frames to run
+blenderFile = config.get("variables", "blenderFile")  # gltf file
+videoName = config.get("variables", "videoName")  # name of scene folder
+movement_data = config.items("movement")  # camera movement
 
 # Makes sure we have a "TestVideos" folder
 if not os.path.exists("OutputData/" + videoName + "/DataExtractionFrames"):
     os.makedirs("OutputData/" + videoName + "/DataExtractionFrames")
 
 try:
-    # load the compound-ray library
+    # Load the compound-ray library
     print("loading the compound-ray library")
     eyeRenderer = CDLL(
         os.path.expanduser("~/compound-ray/build/make/lib/libEyeRenderer3.so")
@@ -72,7 +74,6 @@ try:
     eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-fast-vector"))
 
     # Commented out code that stretches out to fill the data to the entire screen
-
     # # Prepare to generate vector data (1000 ommatidia)
     # vectorWidth = 1000
     # # The upper bound of how many samples will be taken per ommatidium in the analysis
@@ -80,8 +81,7 @@ try:
     # spreadSampleCount = 1000  # How many times each frame is rendered to get a sense of the spread of results from a given ommatidium at different sampling rates
     # eyeTools.setRenderSize(eyeRenderer, vectorWidth, 1)
 
-    frame_ommatid_data = []
-    frame100_ommatid_data = []
+    ommatid_data = []
 
     for j in range(videoFrames):
 
@@ -94,25 +94,26 @@ try:
             ::, :, :3
         ]  # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
 
-        ommatid_data = []
+        single_frame_ommatid_data = []
 
+        # Get color of every ommatidia for frame and apply greyscale
         for i in range(num_omm):
             old_col = rgb[0, i]  # i: an index of ommatidium
             col = np.array(old_col)
             new_col = col.astype(float)
             grey_scale = new_col[0] * 0.299 + new_col[1] * 0.587 + new_col[2] * 0.114
-            ommatid_data.append(grey_scale)
+            single_frame_ommatid_data.append(grey_scale)
 
-        # convert RGB to BGR
+        # Convert RGB to BGR
         bgr = rgb[:, :, ::-1]
 
-        # write the frame to the output video
+        # Write frame
         image_name = (
             "OutputData/" + videoName + "/DataExtractionFrames/def" + str(j) + ".jpg"
         )
         cv2.imwrite(image_name, bgr)
 
-        frame_ommatid_data.append(ommatid_data)
+        ommatid_data.append(single_frame_ommatid_data)
 
         # Movement function
         for k in range(len(movement_data)):
@@ -124,15 +125,11 @@ try:
     # Finally, stop the eye renderer
     eyeRenderer.stop()
 
-    print(np.array(frame_ommatid_data).shape)
-
-    frame_ommatid_data = np.array(frame_ommatid_data)
-
+    # Save ommatid data
+    ommatid_data = np.array(ommatid_data)
+    print(ommatid_data.shape)
     with open("OutputData/" + videoName + "/i_de.pkl", "wb") as handle:
-        pickle.dump(frame_ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-    # ommatid_data = frame100_ommatid_data
-    # np.savetxt("DataExtraction/ommatid_data.csv", ommatid_data, delimiter=",")
+        pickle.dump(ommatid_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 except Exception as e:
     print(e)

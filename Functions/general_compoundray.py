@@ -13,14 +13,16 @@ import configparser
 
 config = configparser.ConfigParser()
 
+# MetaTxt to retrieve csv files and scene txt (later replace with a function)
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
 
+# Read in scene txt
 config.read(readPath)
-videoFrames = int(config.get("variables", "videoFrames"))
-blenderFile = config.get("variables", "blenderFile")
-videoName = config.get("variables", "videoName")
-movement_data = config.items("movement")
+videoFrames = int(config.get("variables", "videoFrames"))  # number of frames to run
+blenderFile = config.get("variables", "blenderFile")  # gltf file
+videoName = config.get("variables", "videoName")  # name of scene folder
+movement_data = config.items("movement")  # camera movement
 
 # Create folder for video frames and video to be saved to
 if not os.path.exists("OutputData/" + videoName + "/CompoundEyeFrames"):
@@ -30,7 +32,7 @@ if not os.path.exists("OutputData/" + videoName + "/PanoramicEyeFrames"):
     os.makedirs("OutputData/" + videoName + "/PanoramicEyeFrames")
 
 try:
-    # load the compound-ray library
+    # Load the compound-ray library
     print("loading the compound-ray library")
     eyeRenderer = CDLL(
         os.path.expanduser("~/compound-ray/build/make/lib/libEyeRenderer3.so")
@@ -70,6 +72,7 @@ try:
     for i in range(2):
         for j in range(videoFrames):
 
+            # Set camera
             if i == 0:
                 eyeRenderer.gotoCameraByName(c_char_p(b"regular-panoramic"))
             elif i == 1:
@@ -82,7 +85,7 @@ try:
                 eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
                 renderTime = eyeRenderer.renderFrame()  # Render the frame
 
-                # display the frame in the renderer
+                # Display the frame in the renderer
                 eyeRenderer.displayFrame()
 
                 # Retrieve frame data
@@ -93,10 +96,10 @@ try:
                     ::-1, :, :3
                 ]  # Remove the alpha component and vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
 
-                # convert RGB to BGR
+                # Convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
 
-                # write the frame to the output video
+                # Write frame
                 image_name = (
                     "OutputData/"
                     + videoName
@@ -109,7 +112,7 @@ try:
             else:
                 # Render the frame
                 renderTime = eyeRenderer.renderFrame()
-                # display the frame in the renderer
+                # Display the frame in the renderer
                 eyeRenderer.displayFrame()
 
                 # Retrieve frame data
@@ -117,14 +120,14 @@ try:
                     :, :, :3
                 ]  # Remove the alpha component
 
-                # vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
+                # Vertically un-invert the array and then display (The retrieved frame data is vertically inverted)
                 rightWayUp = np.flipud(frameDataRGB)
                 # rightWayUp = frameDataRGB[::-1,:,:] also works
 
-                # convert RGB to BGR
+                # Convert RGB to BGR
                 bgr = rightWayUp[:, :, ::-1]
 
-                # write the frame to the output video
+                # Write frame
                 image_name = (
                     "OutputData/"
                     + videoName
@@ -135,7 +138,6 @@ try:
                 cv2.imwrite(image_name, bgr)
 
             # Movement function
-            # Add error message to videoFrames vs motion mismatch
             for k in range(len(movement_data)):
                 if j <= int(movement_data[k][0]):
                     eval(movement_data[k][1])
