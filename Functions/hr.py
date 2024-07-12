@@ -32,7 +32,7 @@ total_ommatid_data = np.genfromtxt(csvData, delimiter=",")
 
 # Split eyes
 right_ommatid_data = total_ommatid_data[1 : num_omm_right + 1, :]
-left_ommatid_data = total_ommatid_data[num_omm_right + 1 : num_omm_left + 1, :]
+left_ommatid_data = total_ommatid_data[num_omm_right + 1 :, :]
 
 # Indexs of neighbors
 adjacent_ommatid_locations_left = np.genfromtxt(csvNeighborsLeft, delimiter=",")
@@ -48,12 +48,12 @@ right_ommatid_values_lpf = []
 t = np.linspace(0, 1.5, 300)  # time points in [s]
 for i in range(left_ommatid_values.shape[1]):
     u = left_ommatid_values[:, i]
-    yf = low_pass_filter(t, u, 0.03)
+    yf = low_pass_filter(t, u, 0.003)
     left_ommatid_values_lpf.append(yf)
 
 for i in range(right_ommatid_values.shape[1]):
     u = right_ommatid_values[:, i]
-    yf = low_pass_filter(t, u, 0.03)
+    yf = low_pass_filter(t, u, 0.003)
     right_ommatid_values_lpf.append(yf)
 
 left_ommatid_values = np.array(left_ommatid_values)
@@ -80,10 +80,11 @@ final_result_3D_left = []
 
 # from the low-pass filter values and ommatidia neighbors,
 # compute the directional motion signal in 6 hex directions
-def hr_func(lovl, laol):
+def hr_func(ovl, aol, ov):
     final_result_3D_left_4dir = []
-    ommatid_values_lpf = lovl
-    adjacent_ommatid_locations = laol
+    ommatid_values_lpf = ovl
+    adjacent_ommatid_locations = aol
+    ommatid_values = ov
     for i in range(np.array(ommatid_values_lpf).shape[1]):  # iterate over all ommatidia
         real_i = np.where(adjacent_ommatid_locations[:, 0] == i + 1)[0].tolist()[
             0
@@ -107,7 +108,7 @@ def hr_func(lovl, laol):
                     co = current_ommatid_positions[z]
                     if np.isnan(co):
                         nan_flag = True
-                    elif np.isnan(left_ommatid_values[j, int(co)]) or np.isnan(
+                    elif np.isnan(ommatid_values[j, int(co)]) or np.isnan(
                         ommatid_values_lpf[j, int(co)]
                     ):
                         nan_flag = True
@@ -122,8 +123,8 @@ def hr_func(lovl, laol):
                             + ommatid_values_lpf[j, int(current_ommatid_positions[5])]
                         ) / 3
                         n1 = (
-                            left_ommatid_values[j, int(current_ommatid_positions[3])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[4])]
+                            ommatid_values[j, int(current_ommatid_positions[3])]
+                            + ommatid_values[j, int(current_ommatid_positions[4])]
                         ) / 3
 
                         lp1 = (
@@ -131,9 +132,9 @@ def hr_func(lovl, laol):
                             + ommatid_values_lpf[j, int(current_ommatid_positions[4])]
                         ) / 3
                         n0 = (
-                            left_ommatid_values[j, int(current_ommatid_positions[2])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[0])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[5])]
+                            ommatid_values[j, int(current_ommatid_positions[2])]
+                            + ommatid_values[j, int(current_ommatid_positions[0])]
+                            + ommatid_values[j, int(current_ommatid_positions[5])]
                         ) / 3
                     elif k == 1:
                         lp0 = (
@@ -142,8 +143,8 @@ def hr_func(lovl, laol):
                             + ommatid_values_lpf[j, int(current_ommatid_positions[5])]
                         ) / 3
                         n1 = (
-                            left_ommatid_values[j, int(current_ommatid_positions[1])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[6])]
+                            ommatid_values[j, int(current_ommatid_positions[1])]
+                            + ommatid_values[j, int(current_ommatid_positions[6])]
                         ) / 3
 
                         lp1 = (
@@ -151,24 +152,24 @@ def hr_func(lovl, laol):
                             + ommatid_values_lpf[j, int(current_ommatid_positions[6])]
                         ) / 3
                         n0 = (
-                            left_ommatid_values[j, int(current_ommatid_positions[2])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[0])]
-                            + left_ommatid_values[j, int(current_ommatid_positions[5])]
+                            ommatid_values[j, int(current_ommatid_positions[2])]
+                            + ommatid_values[j, int(current_ommatid_positions[0])]
+                            + ommatid_values[j, int(current_ommatid_positions[5])]
                         ) / 3
 
                     elif k == 2:
                         lp0 = ommatid_values_lpf[j, int(current_ommatid_positions[0])]
-                        n1 = left_ommatid_values[j, int(current_ommatid_positions[2])]
+                        n1 = ommatid_values[j, int(current_ommatid_positions[2])]
 
                         lp1 = ommatid_values_lpf[j, int(current_ommatid_positions[2])]
-                        n0 = left_ommatid_values[j, int(current_ommatid_positions[0])]
+                        n0 = ommatid_values[j, int(current_ommatid_positions[0])]
 
                     else:
                         lp0 = ommatid_values_lpf[j, int(current_ommatid_positions[0])]
-                        n1 = left_ommatid_values[j, int(current_ommatid_positions[5])]
+                        n1 = ommatid_values[j, int(current_ommatid_positions[5])]
 
                         lp1 = ommatid_values_lpf[j, int(current_ommatid_positions[5])]
-                        n0 = left_ommatid_values[j, int(current_ommatid_positions[0])]
+                        n0 = ommatid_values[j, int(current_ommatid_positions[0])]
 
                     comparison_value = (lp0 * n1) - (lp1 * n0)
 
@@ -190,99 +191,34 @@ def hr_func(lovl, laol):
 
 
 final_result_3D_left_4dir = hr_func(
-    left_ommatid_values_lpf, left_adjacent_ommatid_locations
+    left_ommatid_values_lpf, left_adjacent_ommatid_locations, left_ommatid_values
+)
+
+final_result_3D_right_4dir = hr_func(
+    right_ommatid_values_lpf, right_adjacent_ommatid_locations, right_ommatid_values
 )
 
 print("final", np.array(final_result_3D_left_4dir).shape)
-
-
-final_result_3D_right_4dir = hr_func(
-    right_ommatid_values_lpf, right_adjacent_ommatid_locations
-)
-
 print("final", np.array(final_result_3D_right_4dir).shape)
-
-with open("OutputData/" + videoName + "/f_de_r.pkl", "wb") as handle:
-    pickle.dump(final_result_3D_right_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 with open("OutputData/" + videoName + "/f_de_l.pkl", "wb") as handle:
     pickle.dump(final_result_3D_left_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+with open("OutputData/" + videoName + "/f_de_r.pkl", "wb") as handle:
+    pickle.dump(final_result_3D_right_4dir, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 from matplotlib import pyplot as plt
+
 final_result_3D_left_4dir = np.array(final_result_3D_left_4dir)
 # final_result_3D_left_nolpf = np.array(final_result_3D_left_nolpf)
 
-i = 350
+i = 367
+j = 395
 fig, ax = plt.subplots(1, figsize=(8, 6))
-# ax.plot(left_ommatid_values[:,i])
-# ax.plot(left_ommatid_values_lpf[:,i])
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,0,:], color='red')
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,1,:], color='green')
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,2,:], color='black')
+ax.plot(left_ommatid_values[71:77, i], c = 'r')
+ax.plot(left_ommatid_values[71:77, j])
 
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,0]/1e2, color='red')
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,1], color='green')
-# # ax.plot(np.array(final_result_3D_left_nolpf)[i,:,2]/1e2, color='black')
-# np.array(final_result_3D_left_nolpf)[i,:,2].argmax()
-# # final_result_3D_left_nolpf[i,56,2]
+ax.plot(left_ommatid_values_lpf[71:77, i], c = 'r')
+ax.plot(left_ommatid_values_lpf[71:77, j])
 
-f_max = 56
-fig, ax = plt.subplots(1, figsize=(8, 6))
-ax.plot(final_result_3D_left_4dir[i, 0, 50:60], color = 'r')
-ax.plot(final_result_3D_left_4dir[i, 1, 50:60], color = 'b')
-# ax.plot(final_result_3D_left_4dir[i, 2, 50:60], color = 'y')
-# ax.plot(final_result_3D_left_4dir[i, 3, 50:60], color = 'g')
-
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# ax.plot(left_ommatid_values[56,:])
-# ax.plot(left_ommatid_values_lpf[56,:])
-# # ommatid1 = left_adjacent_ommatid_locations[:, 1]
-# # ommatid2 = left_adjacent_ommatid_locations[:, 2]
-# # ommatid3 = left_adjacent_ommatid_locations[:, 3]
-# # ommatid4 = left_adjacent_ommatid_locations[:, 4]
-# # ommatid5 = left_adjacent_ommatid_locations[:, 5]
-# # ommatid6 = left_adjacent_ommatid_locations[:, 6]
-# ommatid_indicies = [350,376,377,351,324,321,346]
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# # for i in range(left_adjacent_ommatid_locations.shape[1]-1):
-# #     ommatid_indicies.append([i+1])
-
-# print(ommatid_indicies)
-# # ax.plot(left_ommatid_values[14, :])
-# # ax.plot(left_ommatid_values_lpf[14, :])
-# # ax.plot(left_ommatid_values[14, ommatid_indicies])
-# # ax.plot(left_ommatid_values_lpf[14, ommatid_indicies])
-# frame_array = []
-# for i in range(10):
-#     frame_array.append(i+110)
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
-# # # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[1]], color = 'b')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[3]], color = 'y')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[5]], color = 'g')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[0]], color = 'r')
-# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[1]], color = 'b')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[3]], color = 'y')
-# ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[5]], color = 'g')
-
-# fig, ax = plt.subplots(1, figsize=(8, 6))
-
-# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 0], color = 'b')
-# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 2], color = 'y')
-# # ax.plot(final_result_3D_left_nolpf[350, 0:120, 4], color = 'g')
-
-# ax.plot(final_result_3D_left[350, 0, 100:120], color = 'b')
-# ax.plot(final_result_3D_left[350, 2, 100:120], color = 'y')
-# ax.plot(final_result_3D_left[350, 4, 100:120], color = 'g')
-
-
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[0]], color = 'r')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[2]], color = 'b')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[4]], color = 'y')
-# # ax.plot(left_ommatid_values[frame_array, ommatid_indicies[6]], color = 'g')
-# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[0]], color = 'r')
-# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[2]], color = 'b')
-# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[4]], color = 'y')
-# # ax.plot(left_ommatid_values_lpf[frame_array, ommatid_indicies[6]], color = 'g')
+ax.plot(final_result_3D_left_4dir[i, 0, 71:77])
