@@ -1,5 +1,5 @@
 [data]
-path: Scenes/TubeScene/tube_scene.txt
-csvData: InputData/lens_opticAxis_20240701.csv
+path: Scenes/GeneralScene/general_scene.txt
+csvData: cylinderical_eye_data.csv
 csvNeighborsLeft: InputData/ind_nb_matched_left_20240701.csv
 csvNeighborsRight: InputData/ind_nb_matched_right_20240701.csv

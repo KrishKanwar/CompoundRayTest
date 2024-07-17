@@ -18,7 +18,7 @@ config = configparser.ConfigParser()
 config.read("MetaTxt.txt")
 readPath = config.get("data", "path")
 csvData = config.get("data", "csvData")
-direction = int(config.get("data", "direction"))
+# direction = int(config.get("data", "direction"))
 
 data = np.genfromtxt(csvData, delimiter=",")
 num_omm = data.shape[0] - 1  # get number of ommatidia in complete eye (l & r)
