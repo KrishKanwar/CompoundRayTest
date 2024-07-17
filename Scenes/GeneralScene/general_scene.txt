@@ -4,5 +4,5 @@ blenderFile: general_scene.gltf
 videoName: GeneralScene
 
 [movement]
-119: eyeRenderer.translateCameraLocally(0.0, 0.0, 1.0)
+119: eyeRenderer.translateCameraLocally(0.0, 0.0, 1.25)
 299: eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)

@@ -16,18 +16,20 @@ def create_csv_with_data(file_path):
 
         # Define a static value for z and acceptance
         z = 0.0  # example static value
-        acceptance = 0.0  # example static value
+        z_range = 3
+        acceptance = 10.0  # example static value
 
-        points_num = 16
+        points_num = 360
 
-        for j in range(5):
+        for j in range(z_range):
             # Write 16 rows of data
             for i in range(points_num):
-                angle = (360/points_num)*i
-                x = np.cos(np.radians(angle))
-                y = np.sin(np.radians(angle))
-                vx = x - 0
-                vy = y - 0
+                angle = (360 / points_num) * i
+                x = 50 * np.cos(np.radians(angle))
+                y = 1 * np.sin(np.radians(angle))
+                z = (1 * j) - (1 * (z_range - 1) / 2)
+                vx = np.cos(np.radians(angle))
+                vy = np.sin(np.radians(angle))
                 vz = 0  # vz is static
 
                 # Write the row
@@ -37,4 +39,4 @@ def create_csv_with_data(file_path):
 
 
 # Example usage:
-create_csv_with_data("output_with_data.csv")
+create_csv_with_data("cylinderical_eye_data.csv")
