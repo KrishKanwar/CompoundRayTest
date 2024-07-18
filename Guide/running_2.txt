@@ -1,0 +1,12 @@
+### Creating a scene ###
+(Using blender)
+
+### Configuring input data ###
+(.eye)
+
+### Running ###
+(MasterFile)
+
+### Output ###
+
+### Cylinderical Camera ###
