@@ -4,4 +4,4 @@ blenderFile: tube_scene.gltf
 videoName: TubeScene
 
 [movement]
-299: eyeRenderer.translateCameraLocally(0.0, 0.0, 0.2)
+300: eyeRenderer.translateCameraLocally(0.0, 0.0, 0.2)

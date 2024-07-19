@@ -82,7 +82,7 @@ try:
 
             # If the current eye is a compound eye, set the sample rate for it high
             if eyeRenderer.isCompoundEyeActive():
-                eyeRenderer.setCurrentEyeSamplesPerOmmatidium(100)
+                eyeRenderer.setCurrentEyeSamplesPerOmmatidium(25)
                 renderTime = eyeRenderer.renderFrame()  # Render the frame
 
                 # Display the frame in the renderer

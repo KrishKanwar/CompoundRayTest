@@ -16,21 +16,23 @@ def create_csv_with_data(file_path):
 
         # Define a static value for z and acceptance
         z = 0.0  # example static value
-        z_range = 3
+        z_range = 7
         acceptance = 10.0  # example static value
 
-        points_num = 360
+        points_num = 20
 
         for j in range(z_range):
             # Write 16 rows of data
             for i in range(points_num):
                 angle = (360 / points_num) * i
-                x = 50 * np.cos(np.radians(angle))
+                x = 1 * np.cos(np.radians(angle))
                 y = 1 * np.sin(np.radians(angle))
-                z = (1 * j) - (1 * (z_range - 1) / 2)
+                # z = (1/7) * (j - ((z_range - 1) / 2))
+                z = 1000 * (j-((z_range-1)/2))/((z_range-1)/2)
                 vx = np.cos(np.radians(angle))
                 vy = np.sin(np.radians(angle))
-                vz = 0  # vz is static
+                # vz = (j - (z_range / 2)) / (z_range / 2)  # vz is static
+                vz = 0
 
                 # Write the row
                 writer.writerow([x, y, z, vx, vy, vz, acceptance])
