@@ -71,21 +71,6 @@ python convertcsv.py -i path/to/input.csv -o path/to/output.eye
 
 
 
-### Modify the GLTF scene ###
-Download Blender (https://www.blender.org/download/)
-Open blender and delete objects in the default scene. (A (select all) > X (delete))
-Import the example glTF scene. (File > Import > glTF 2.0 > select "natural-standing-sky.gltf")
-Add objects to the imported scene (Add > Cylinder or something) (https://www.instructables.com/Beginners-Guide-to-Blender/)
-Add a directional light to the scene. (Add > Light > Sun)
-Set materials (https://www.youtube.com/watch?v=oFrX9OjFUko)
-Join all mesh objects (Ctrl+J) (Compound-ray does not accept multiple meshes.)
-Edit the UV map and bake colors to the texture. (https://brandonsdrawings.com/texture-baking/)
-Select "insect-eye-spherical-projector_Orientation".
-Set the path to the eye model. (Properties panel > Camera > Custom Properties > compound-structure)
-Export the modified glTF scene. (File > Export > glTF 2.0) (include "Custom Properties" and "Cameras")
-
-
-
 ### Generating movies of the modified GLTF scene ###
 python3 -m pip install opencv-python
 conda install pillow

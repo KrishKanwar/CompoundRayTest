@@ -1,5 +1,15 @@
 ### Creating a scene ###
-(Using blender)
+Download Blender (https://www.blender.org/download/)
+Open blender and delete objects in the default scene. (A (select all) > X (delete))
+Import the example glTF scene. (File > Import > glTF 2.0 > select "natural-standing-sky.gltf")
+Add objects to the imported scene (Add > Cylinder or something) (https://www.instructables.com/Beginners-Guide-to-Blender/)
+Add a directional light to the scene. (Add > Light > Sun)
+Set materials (https://www.youtube.com/watch?v=oFrX9OjFUko)
+Join all mesh objects (Ctrl+J) (Compound-ray does not accept multiple meshes.)
+Edit the UV map and bake colors to the texture. (https://brandonsdrawings.com/texture-baking/)
+Select "insect-eye-spherical-projector_Orientation".
+Set the path to the eye model. (Properties panel > Camera > Custom Properties > compound-structure)
+Export the modified glTF scene. (File > Export > glTF 2.0) (include "Custom Properties" and "Cameras")
 
 ### Configuring input data ###
 (.eye)
