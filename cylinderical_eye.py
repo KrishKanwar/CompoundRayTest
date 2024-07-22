@@ -16,10 +16,10 @@ def create_csv_with_data(file_path):
 
         # Define a static value for z and acceptance
         z = 0.0  # example static value
-        z_range = 7
+        z_range = 21
         acceptance = 10.0  # example static value
 
-        points_num = 20
+        points_num = 100
 
         for j in range(z_range):
             # Write 16 rows of data
@@ -28,7 +28,7 @@ def create_csv_with_data(file_path):
                 x = 1 * np.cos(np.radians(angle))
                 y = 1 * np.sin(np.radians(angle))
                 # z = (1/7) * (j - ((z_range - 1) / 2))
-                z = 1000 * (j-((z_range-1)/2))/((z_range-1)/2)
+                z = 100000 * (j - ((z_range - 1) / 2)) / ((z_range - 1) / 2)
                 vx = np.cos(np.radians(angle))
                 vy = np.sin(np.radians(angle))
                 # vz = (j - (z_range / 2)) / (z_range / 2)  # vz is static

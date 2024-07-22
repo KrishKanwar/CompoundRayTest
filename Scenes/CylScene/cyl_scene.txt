@@ -1,0 +1,8 @@
+[variables]
+videoFrames: 300
+blenderFile: cyl_scene.gltf
+videoName: CylScene
+
+[movement]
+119: eyeRenderer.translateCameraLocally(0.0, 0.0, 0.08)
+299: eyeRenderer.rotateCameraLocallyAround((2.0) / 360.0 * (2.0 * math.pi), 0, 1.0, 0)
