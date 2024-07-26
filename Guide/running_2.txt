@@ -17,6 +17,7 @@ Export the modified glTF scene. (File > Export > glTF 2.0) (include "Custom Prop
 git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
 cd CompoundRayTest
 python Functions/convertcsv.py -i path/to/input.csv -o path/to/output.eye
+Move csv and new .eye file to InputData folder
 
 
 
