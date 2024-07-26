@@ -48,7 +48,7 @@ make -j 8
 
 
 
-### Test Compound-Ray ###
+### Set-Up Compound-Ray ###
 Download Miniconda (https://docs.conda.io/en/latest/miniconda.html#linux-installers)
 bash Miniconda3-latest-Linux-x86_64.sh
 Install Visual Studio Code (https://code.visualstudio.com/)
@@ -63,18 +63,10 @@ Run the following commands on the terminal:
  python3 primary-example.py
 
 
-
-### Convert an eye-model csv file to the compound-ray eye format ###
-git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
-cd CompoundRayTest
-python convertcsv.py -i path/to/input.csv -o path/to/output.eye
-
-
-
+### Not sure where to put this one ###
 ### Generating movies of the modified GLTF scene ###
 python3 -m pip install opencv-python
 conda install pillow
 git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
-cd CompoundRayTest
-python testCompoundRay.py
-
+cd CompoundRayTests
+python functions/testCompoundRay.py

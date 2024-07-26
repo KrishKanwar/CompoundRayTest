@@ -51,6 +51,14 @@ r_adj_omm_loc = r_adj_omm_loc[1:, :]
 
 
 def motion_d(pts, aol, fr3, dir):
+    xy_return = []
+    q_coord_diff_x_no_mult = []
+    q_coord_diff_y_no_mult = []
+    q_coord_diff_x_mult = []
+    q_coord_diff_y_mult = []
+
+    # other_test = []
+
     direction = dir
     adj_omm_loc = aol
     f_result_3D = fr3
@@ -84,13 +92,18 @@ def motion_d(pts, aol, fr3, dir):
 
     xy = sph2Mollweide(rtp_main[:, 1:3])
 
-    for g in range(f_result_3D.shape[2]):  # num of frames
-        for h in range(f_result_3D.shape[1]):  # num of ommatidia
+    # f_result_3D.shape[2]
+    for g in range(5):  # num of frames
+        q_coord_diff_x_mult_temp = []
+        q_coord_diff_y_mult_temp = []
+
+        for h in range(f_result_3D.shape[1]):  # num of directions
 
             q_coord_diff_x = []
             q_coord_diff_y = []
+            # other_test_temp1 = []
 
-            for i in range(xy.shape[0]):  # num of directions
+            for i in range(xy.shape[0]):  # num of ommatidia
                 real_i = np.where(adj_omm_loc[:, 0] == i + 1)[0].tolist()[
                     0
                 ]  # Change to in order of ommatidia in csv
@@ -156,8 +169,8 @@ def motion_d(pts, aol, fr3, dir):
                     vy = -1 * vy / divide_factor
 
                     # Multiply normalized direction by hr output
-                    vx = vx * f_result_3D[i, h, g]
-                    vy = vy * f_result_3D[i, h, g]
+                    # vx = vx * f_result_3D[i, h, g]
+                    # vy = vy * f_result_3D[i, h, g]
 
                     q_coord_diff_x.append(vx)
                     q_coord_diff_y.append(vy)
@@ -168,12 +181,17 @@ def motion_d(pts, aol, fr3, dir):
             plt.plot(eq_xy[:, 0], eq_xy[:, 1], "-k", linewidth=1)
             plt.plot(s45_xy[:, 0], s45_xy[:, 1], "-k", linewidth=1)
 
-            plt.quiver(xy[:, 0], xy[:, 1], q_coord_diff_x, q_coord_diff_y)
+            plt.quiver(
+                xy[:, 0],
+                xy[:, 1],
+                (q_coord_diff_x * f_result_3D[:, h, g]),
+                (q_coord_diff_y * f_result_3D[:, h, g]),
+            )
             plt.xlabel("azimuth")
             plt.ylabel("elevation")
 
             # Save plots
-            if direction == 0:
+            if direction == "left":
                 plt.savefig(
                     "OutputData/"
                     + videoName
@@ -183,7 +201,7 @@ def motion_d(pts, aol, fr3, dir):
                     + str(h)
                     + "-direction.png"
                 )
-            elif direction == 1:
+            elif direction == "right":
                 # plt.show()
                 plt.savefig(
                     "OutputData/"
@@ -195,9 +213,60 @@ def motion_d(pts, aol, fr3, dir):
                     + "-direction.png"
                 )
 
+            # other_test_temp1.append(xy[:, 0])
+            # other_test_temp1.append(xy[:, 1])
+            # other_test_temp1.append(q_coord_diff_x*f_result_3D[:, h, g])
+            # other_test_temp1.append(q_coord_diff_y*f_result_3D[:, h, g])
+
             plt.clf()
 
+            if g == 0:
+                q_coord_diff_x_no_mult.append(q_coord_diff_x)
+                q_coord_diff_y_no_mult.append(q_coord_diff_y)
+
+            # q_coord_diff_x_mult_temp.append(q_coord_diff_x * f_result_3D[:, h, g])
+            # q_coord_diff_y_mult_temp.append(q_coord_diff_y * f_result_3D[:, h, g])
+            q_coord_diff_x_mult_temp.append(q_coord_diff_x)
+            q_coord_diff_y_mult_temp.append(q_coord_diff_y)
+            # print("q", np.array(q_coord_diff_x_mult_temp).shape)
+
+        # other_test.append(other_test_temp1)
+
+        q_coord_diff_x_mult.append(q_coord_diff_x_mult_temp)
+        q_coord_diff_y_mult.append(q_coord_diff_y_mult_temp)
+
+    xy_return = xy
+
+    xy_return = np.array(xy_return)
+    q_coord_diff_x_no_mult = np.array(q_coord_diff_x_no_mult)
+    q_coord_diff_y_no_mult = np.array(q_coord_diff_y_no_mult)
+    q_coord_diff_x_mult = np.array(q_coord_diff_x_mult)
+    q_coord_diff_y_mult = np.array(q_coord_diff_y_mult)
+
+    q_coord_diff_x_no_mult = np.transpose(q_coord_diff_x_no_mult)
+    q_coord_diff_y_no_mult = np.transpose(q_coord_diff_y_no_mult)
+    q_coord_diff_x_mult = np.transpose(q_coord_diff_x_mult)
+    q_coord_diff_y_mult = np.transpose(q_coord_diff_y_mult)
+
+    print("xy_return ", xy_return.shape)
+    print("q_coord_diff_x_no_mult ", q_coord_diff_x_no_mult.shape)
+    print("q_coord_diff_y_no_mult ", q_coord_diff_y_no_mult.shape)
+    print("q_coord_diff_x_mult ", q_coord_diff_x_mult.shape)
+    print("q_coord_diff_y_mult ", q_coord_diff_y_mult.shape)
+    # print("other_test ", np.array(other_test).shape)
+
+    # Save output
+    with open("Pkls/xy_return_" + direction + ".pkl", "wb") as handle:
+        pickle.dump(xy_return, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("Pkls/q_coord_diff_x_no_mult_" + direction + ".pkl", "wb") as handle:
+        pickle.dump(q_coord_diff_x_no_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("Pkls/q_coord_diff_y_no_mult_" + direction + ".pkl", "wb") as handle:
+        pickle.dump(q_coord_diff_y_no_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("Pkls/q_coord_diff_x_mult_" + direction + ".pkl", "wb") as handle:
+        pickle.dump(q_coord_diff_x_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    with open("Pkls/q_coord_diff_y_mult_" + direction + ".pkl", "wb") as handle:
+        pickle.dump(q_coord_diff_y_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # Run method for left and right eye
-motion_d(pts_l, l_adj_omm_loc, f_result_3D_l, 0)
-motion_d(pts_r, r_adj_omm_loc, f_result_3D_r, 1)
+motion_d(pts_l, l_adj_omm_loc, f_result_3D_l, "left")
+motion_d(pts_r, r_adj_omm_loc, f_result_3D_r, "right")

@@ -1,9 +1,0 @@
-Parameters:
-x, y, z, vx, vy, vz, accept. angle
-
-0, 0, 0, 1, 0, 0, 0.1 looks directly ahead
-0, 0, 0, -1, 0, 0, 0.1 looks directly behind
-0, 0, 0, 0, 1, 0, 0.1 looks directly right
-0, 0, 0, 0, -1, 0, 0.1 looks directly left
-0, 0, 0, 0, 0, 1, 0.1 looks directly up
-0, 0, 0, 0, 0, -1, 0.1 looks directly down

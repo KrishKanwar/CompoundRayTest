@@ -1,0 +1,2 @@
+2024-07-11
+ loop over SO = 1,2,3, 90% vote, cdf normalized 

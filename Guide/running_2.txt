@@ -11,11 +11,44 @@ Select "insect-eye-spherical-projector_Orientation".
 Set the path to the eye model. (Properties panel > Camera > Custom Properties > compound-structure)
 Export the modified glTF scene. (File > Export > glTF 2.0) (include "Custom Properties" and "Cameras")
 
+
+
 ### Configuring input data ###
-(.eye)
+git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
+cd CompoundRayTest
+python Functions/convertcsv.py -i path/to/input.csv -o path/to/output.eye
+
+
+
+### Changing Scene ###
+Go to MetaTxt
+Change which scene is used with path
+Match csv/eye file input used by gltf with csvData and csvNeighbors
+
+
+
+### Editing glTF ###
+Go to Scenes/{scene name}.gltf
+Find name of camera in glTF
+Change "compound-structure" to change .eye file input
+
+
+
+### Editing Scene Inputs ###
+Go to Scenes/{scene name}.txt
+Change video frames and movement to whatever
+Match blenderFile to name of gltf
+Match videoName to parent folder name
+
+
 
 ### Running ###
-(MasterFile)
+Once all inputs are configured run:
+python Functions/general_compoundray.py
+python Functions/data_extraction_test.py
+python Functions/hr.py
+python Functions/motion_detector.py
+All results should be to folder OutputData
 
 ### Output ###
 

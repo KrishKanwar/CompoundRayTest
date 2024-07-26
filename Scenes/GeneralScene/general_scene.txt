@@ -1,6 +1,6 @@
 [variables]
 videoFrames: 300
-blenderFile: general_scene2.gltf
+blenderFile: general_scene.gltf
 videoName: GeneralScene
 
 [movement]
