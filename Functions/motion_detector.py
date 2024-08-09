@@ -1,3 +1,4 @@
+# Combines HR values with ommatidia directions and plots output
 import matplotlib.pyplot as plt
 import numpy as np
 from cmath import pi
@@ -93,7 +94,7 @@ def motion_d(pts, aol, fr3, dir):
     xy = sph2Mollweide(rtp_main[:, 1:3])
 
     # f_result_3D.shape[2]
-    for g in range(5):  # num of frames
+    for g in range(f_result_3D.shape[2]):  # num of frames
         q_coord_diff_x_mult_temp = []
         q_coord_diff_y_mult_temp = []
 
@@ -226,8 +227,8 @@ def motion_d(pts, aol, fr3, dir):
 
             # q_coord_diff_x_mult_temp.append(q_coord_diff_x * f_result_3D[:, h, g])
             # q_coord_diff_y_mult_temp.append(q_coord_diff_y * f_result_3D[:, h, g])
-            q_coord_diff_x_mult_temp.append(q_coord_diff_x)
-            q_coord_diff_y_mult_temp.append(q_coord_diff_y)
+            q_coord_diff_x_mult_temp.append(q_coord_diff_x * f_result_3D[:, h, g])
+            q_coord_diff_y_mult_temp.append(q_coord_diff_y * f_result_3D[:, h, g])
             # print("q", np.array(q_coord_diff_x_mult_temp).shape)
 
         # other_test.append(other_test_temp1)
@@ -255,7 +256,7 @@ def motion_d(pts, aol, fr3, dir):
     print("q_coord_diff_y_mult ", q_coord_diff_y_mult.shape)
     # print("other_test ", np.array(other_test).shape)
 
-    # Save output
+    # Save output to "Pkls folder" for lptc_func
     with open("Pkls/xy_return_" + direction + ".pkl", "wb") as handle:
         pickle.dump(xy_return, handle, protocol=pickle.HIGHEST_PROTOCOL)
     with open("Pkls/q_coord_diff_x_no_mult_" + direction + ".pkl", "wb") as handle:
@@ -266,6 +267,7 @@ def motion_d(pts, aol, fr3, dir):
         pickle.dump(q_coord_diff_x_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
     with open("Pkls/q_coord_diff_y_mult_" + direction + ".pkl", "wb") as handle:
         pickle.dump(q_coord_diff_y_mult, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 
 # Run method for left and right eye
 motion_d(pts_l, l_adj_omm_loc, f_result_3D_l, "left")

@@ -1,3 +1,4 @@
+# Converts ommatidia csv data to .eye file format to input to blender
 import csv
 import math
 import sys

@@ -1,3 +1,4 @@
+# Produces Reichardt Function values used in motion_detector.py
 import numpy as np
 from cmath import pi
 from lowpass_method import low_pass_filter
@@ -55,6 +56,8 @@ for i in range(r_omm_vals.shape[1]):
     r_omm_vals_lpf.append(yf)
 
 # Make sure all set as np.array
+# TODO Update comment below
+# all "omm_vals" have shape [ommatidia, ]
 l_omm_vals = np.array(l_omm_vals)
 l_omm_vals_lpf = np.array(l_omm_vals_lpf)
 l_omm_vals_lpf = np.transpose(l_omm_vals_lpf)  # take the transpose
@@ -109,7 +112,7 @@ def hr_func(ovl, aol, ov):
                 if nan_flag:
                     single_omm_single_frame.append(np.nan)  # append nan if no neighbor
 
-                # Averaging for 4 neighbors, hardcoded
+                # Averaging for 4 neighbors, hardcoded depending on direction
                 else:
                     if k == 0:
                         lp0 = (

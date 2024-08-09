@@ -1,3 +1,4 @@
+# Runs blender camera that extracts the pixel value of each ommatidia for each frame
 import os.path
 import time
 import math

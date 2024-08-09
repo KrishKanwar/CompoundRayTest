@@ -1,3 +1,4 @@
+# Produces panoramic and compound-eye videos for a scene
 import os.path
 import time
 import math
@@ -15,7 +16,7 @@ config = configparser.ConfigParser()
 
 # MetaTxt to retrieve csv files and scene txt (later replace with a function)
 config.read("MetaTxt.txt")
-readPath = config.get("data", "path")
+readPath = config.get("data", "path")  # Path to scene information
 
 # Read in scene txt
 config.read(readPath)
@@ -25,6 +26,7 @@ videoName = config.get("variables", "videoName")  # name of scene folder
 movement_data = config.items("movement")  # camera movement
 
 # Create folder for video frames and video to be saved to
+# Code runs two cameras in this case
 if not os.path.exists("OutputData/" + videoName + "/CompoundEyeFrames"):
     os.makedirs("OutputData/" + videoName + "/CompoundEyeFrames")
 
@@ -40,6 +42,7 @@ try:
     print("Successfully loaded ", eyeRenderer)
 
     # Configure the renderer's function outputs and inputs
+    # Moves functions from compound-ray library to python
     eyeTools.configureFunctions(eyeRenderer)
 
     # Load the modified example scene
@@ -70,15 +73,13 @@ try:
 
     # Camera 0: regular-panoramic  Camera 1: lens_opticAxis_acceptance.eye
     for i in range(2):
-        for j in range(videoFrames):
+        # Set camera
+        if i == 0:
+            eyeRenderer.gotoCameraByName(c_char_p(b"regular-panoramic"))
+        elif i == 1:
+            eyeRenderer.gotoCameraByName(c_char_p(b"insect-eye-spherical-projector"))
 
-            # Set camera
-            if i == 0:
-                eyeRenderer.gotoCameraByName(c_char_p(b"regular-panoramic"))
-            elif i == 1:
-                eyeRenderer.gotoCameraByName(
-                    c_char_p(b"insect-eye-spherical-projector")
-                )
+        for j in range(videoFrames):
 
             # If the current eye is a compound eye, set the sample rate for it high
             if eyeRenderer.isCompoundEyeActive():

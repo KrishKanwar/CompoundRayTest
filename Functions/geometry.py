@@ -1,3 +1,4 @@
+# Helper functions for plotting in motion_detector.py
 from cmath import cos
 import pandas as pd
 import numpy as np
@@ -67,7 +68,7 @@ def sph2Mollweide(thetaphi: np.array) -> np.array:
                 2 * np.sqrt(2) / np.pi * azim[i] * np.cos(theta),
                 np.sqrt(2) * np.sin(theta),
             ]
-    xy[:, 0] = -1*xy[:, 0]
+    xy[:, 0] = -1 * xy[:, 0]
     return xy
 
 

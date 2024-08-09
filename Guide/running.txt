@@ -1,0 +1,61 @@
+### Creating a Scene in Blender ###
+Download Blender (https://www.blender.org/download/)
+Open blender and delete objects in the default scene. (A (select all) > X (delete))
+Import the example glTF scene. (File > Import > glTF 2.0 > select "natural-standing-sky.gltf")
+Add objects to the imported scene (Add > Cylinder or something) (https://www.instructables.com/Beginners-Guide-to-Blender/)
+Add a directional light to the scene. (Add > Light > Sun)
+Set materials (https://www.youtube.com/watch?v=oFrX9OjFUko)
+Join all mesh objects (Ctrl+J) (Compound-ray does not accept multiple meshes.)
+Edit the UV map and bake colors to the texture. (https://brandonsdrawings.com/texture-baking/)
+Select "insect-eye-spherical-projector_Orientation".
+Set the path to the eye model. (Properties panel > Camera > Custom Properties > compound-structure)
+Export the modified glTF scene. (File > Export > glTF 2.0) (include "Custom Properties" and "Cameras")
+
+
+
+### Configuring Input Data ###
+git clone https://github.com/JaneliaSciComp/CompoundRayTest.git
+cd CompoundRayTest
+python Functions/convertcsv.py -i path/to/input.csv -o path/to/output.eye
+Move csv and new .eye file to InputData folder
+The .eye file reconfigures the structure of the eye to the correct format to be input to CompoundRay
+
+
+
+### Configuring glTF File (Blender Scene) ###
+Go to Scenes/{scene name}.gltf
+Find name of camera in glTF
+Change "compound-structure" to change .eye file input
+The functions and files that CompoundRay should use for a given camera are input through these camera properties in Blender (inputs) 
+
+
+
+### Editing Scene Inputs (Parameters for Video Output) ###
+Go to Scenes/{scene name}.txt
+Change video frames and movement to whatever (frames for entire video, movement can be any position to position translation or rotation)
+Match blenderFile to name of gltf
+Match videoName to parent folder name
+This allows for the python file to read in the correct folder and scene through the txt file
+This method allows for one place to quickly be edited to change which scene the python files will run
+
+
+
+### Changing Scene (Quickly Switch Which Scene and Parameters are Used) ###
+Go to MetaTxt
+Change which scene is used with path
+Match csv/eye file input used by gltf with csvData and csvNeighbors
+In MetaTxt, the txt file itself that is used and all of the other data parameters are changed
+
+
+
+### Running (Running all Functions) ###
+Once all inputs are configured run:
+python Functions/general_compoundray.py (creates compound and panoramic video)
+python Functions/data_extraction_test.py (extracts pixel of each ommatidia in scene for each frame)
+python Functions/hr.py (applies Reichard function to data_extraction_test output)
+python Functions/motion_detector.py (graphs hr output for visualization)
+All results should be to folder OutputData (uses data from hr/motion_detector in Pkls folder to calculate signal/activation of each neuron and graph to visualize output)
+
+### Output ###
+
+### Cylinderical Camera ###

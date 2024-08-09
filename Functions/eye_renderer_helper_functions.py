@@ -1,3 +1,4 @@
+# Provides functions used to run cameras in scenes and produce output
 import math
 from numpy.ctypeslib import ndpointer
 import numpy as np

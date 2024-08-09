@@ -1,3 +1,4 @@
+# Helper function to apply lowpass filter to values in hr.py
 import numpy as np
 from cmath import pi
 import matplotlib.pyplot as plt
