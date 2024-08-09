@@ -50,17 +50,21 @@ def lptc_func(lptc_csv, dir, number):
             else:
                 lptc_data[i, k] = 1
 
-    # Save output
+    # Read in Pkls data
     with open("Pkls/xy_return_" + direction + ".pkl", "rb") as handle:
-        xy_return = np.array(pickle.load(handle))
+        xy_return = np.array(
+            pickle.load(handle)
+        )  # x and y values of ommatidia (position)
 
     with open("Pkls/q_coord_diff_x_no_mult_" + direction + ".pkl", "rb") as handle:
-        q_coord_diff_x_no_mult = np.array(pickle.load(handle))
+        q_coord_diff_x_no_mult = np.array(pickle.load(handle))  # normalized values
     with open("Pkls/q_coord_diff_y_no_mult_" + direction + ".pkl", "rb") as handle:
         q_coord_diff_y_no_mult = np.array(pickle.load(handle))
 
     with open("Pkls/q_coord_diff_x_mult_" + direction + ".pkl", "rb") as handle:
-        q_coord_diff_x_mult = np.array(pickle.load(handle))
+        q_coord_diff_x_mult = np.array(
+            pickle.load(handle)
+        )  # motion signal (non-normalized values)
     with open("Pkls/q_coord_diff_y_mult_" + direction + ".pkl", "rb") as handle:
         q_coord_diff_y_mult = np.array(pickle.load(handle))
 
@@ -94,7 +98,9 @@ def lptc_func(lptc_csv, dir, number):
     # all_frame_all_omm = np.array(all_frame_all_omm)
     # print(all_frame_all_omm.shape)
 
-    struct_data = np.genfromtxt("InputData/lens_opticAxis_20240701.csv", delimiter=",")
+    struct_data = np.genfromtxt(
+        "InputData/lens_opticAxis_20240701.csv", delimiter=","
+    )  # ommatidia structure
     pts_l = struct_data[1:778, 3:6]
     pts_r = struct_data[778:, 3:6]
 
@@ -138,12 +144,13 @@ def lptc_func(lptc_csv, dir, number):
     # magnitudes = q_coord_diff_x_mult
 
     # Calculates signal value for each frame
+    # TODO change signal to add up the non-zero horizontal vector direction with non-zero vertical vector direction, then get magnitude, not magnitudes added together
     mag_vals = 0
     num_vals = 0
     signal = []
-    for i in range(magnitudes.shape[2]):
-        for j in range(magnitudes.shape[1]):
-            for k in range(magnitudes.shape[0]):
+    for i in range(magnitudes.shape[2]):  # frames
+        for j in range(magnitudes.shape[1]):  # directions
+            for k in range(magnitudes.shape[0]):  # ommatidia
                 if magnitudes[k, j, i] != 0 and np.isnan(magnitudes[k, j, i]) == False:
                     mag_vals += magnitudes[k, j, i]
                     num_vals += 1

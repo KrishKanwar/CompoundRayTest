@@ -1,4 +1,4 @@
-# Produces Reichardt Function values used in motion_detector.py
+# Produces Reichardt Function values used in motion_detector.py, Tau value for low pass filter hardcoded
 import numpy as np
 from cmath import pi
 from lowpass_method import low_pass_filter
@@ -56,8 +56,6 @@ for i in range(r_omm_vals.shape[1]):
     r_omm_vals_lpf.append(yf)
 
 # Make sure all set as np.array
-# TODO Update comment below
-# all "omm_vals" have shape [ommatidia, ]
 l_omm_vals = np.array(l_omm_vals)
 l_omm_vals_lpf = np.array(l_omm_vals_lpf)
 l_omm_vals_lpf = np.transpose(l_omm_vals_lpf)  # take the transpose
@@ -68,6 +66,7 @@ l_adj_omm_loc = np.array(l_adj_omm_loc)
 r_adj_omm_loc = np.array(r_adj_omm_loc)
 
 # Print shapes
+# all "omm_vals" have shape [ommatidia, directions, frames]
 print(l_omm_vals.shape)
 print(l_omm_vals_lpf.shape)
 print(r_omm_vals.shape)
@@ -114,7 +113,7 @@ def hr_func(ovl, aol, ov):
 
                 # Averaging for 4 neighbors, hardcoded depending on direction
                 else:
-                    if k == 0:
+                    if k == 0: # Horizontal direction ({2,4}-{0,2,5}, right - middle)
                         lp0 = (
                             omm_vals_lpf[j, int(omm_pos[0])]
                             + omm_vals_lpf[j, int(omm_pos[2])]
@@ -150,7 +149,7 @@ def hr_func(ovl, aol, ov):
                             + omm_vals[j, int(omm_pos[0])]
                             + omm_vals[j, int(omm_pos[5])]
                         ) / 3
-                    elif k == 2:
+                    elif k == 2: # Vertical direction (2-0, top minus middle)
                         lp0 = omm_vals_lpf[j, int(omm_pos[0])]
                         n1 = omm_vals[j, int(omm_pos[2])]
                         lp1 = omm_vals_lpf[j, int(omm_pos[2])]
